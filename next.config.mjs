@@ -1,24 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true, // Helps catch issues during development
+  reactStrictMode: true,
 
   eslint: {
-    ignoreDuringBuilds: true, // Ignores ESLint errors on build
+    ignoreDuringBuilds: true,
   },
 
   typescript: {
-    ignoreBuildErrors: true, // Ignores TypeScript errors on build
+    ignoreBuildErrors: true,
   },
 
   images: {
-    unoptimized: true, // Required when using `output: 'export'`
+    unoptimized: true,
   },
 
-  output: 'export', // Required for static export
+  // ❌ DO NOT ADD: output: 'export'
+  // output: 'export' sirf static websites ke liye hota hai
 
   experimental: {
-    typedRoutes: true, // Safe route linking
-    // DO NOT add `serverActions` here – it's a boolean in newer versions only when used properly
+    typedRoutes: true,
   },
 };
 
