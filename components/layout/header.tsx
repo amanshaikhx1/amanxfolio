@@ -141,7 +141,7 @@ const Header = () => {
               <div className="absolute inset-1 bg-black rounded-lg rotate-45"></div>
               <div className="absolute inset-0 w-full h-full flex items-center justify-center">
                 <span className="text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text font-bold text-2xl animate-pulse-slow">
-                  A͓̽
+                  A
                 </span>
               </div>
               <div className="absolute top-0 right-0 w-3 h-3 bg-green-400 rounded-full animate-pulse-slow"></div>
