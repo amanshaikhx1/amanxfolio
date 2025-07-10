@@ -15,7 +15,7 @@ const Footer = dynamic(() => import("@/components/layout/footer"), { ssr: true }
 const BackToTop = dynamic(() => import("@/components/back-to-top"), { ssr: true })
 
 export const metadata = {
-  title: "My Portfolio",
+  title: "AmanxFolio",
   description: "This is my portfolio site.",
   icons: {
     icon: "/aman.jpg",
