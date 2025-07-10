@@ -76,13 +76,7 @@ const AboutSection = () => {
             </h3>
 
             <p className="text-gray-600 dark:text-gray-300 mb-8">
-              I’m building a strong foundation as a Business Analyst by exploring how data, clear communication, and structured thinking solve real-world problems.
-
-              While pursuing my BCA from Amity University Online, I’ve developed interest in stakeholder analysis, requirement documentation, and tools like Excel, SQL, and Power BI.
-
-              I designed and structured this website myself, using no-code platforms and AI tools to turn my ideas into a working portfolio.
-
-              My long-term goal is to work with organizations that value clarity, collaboration, and impact. I want to grow into a role where I can contribute to better business outcomes by connecting data, people, and processes in meaningful ways.
+              I'm building my career as a Business Data Analyst by combining data, communication, and structured thinking to solve real-world business challenges. I work with tools like Excel, SQL, Power BI, and Python, and built this portfolio using AI tools to turn ideas into a live project. My goal is to drive better outcomes by connecting data, people, and processes in clear and meaningful ways.
 
             </p>
 

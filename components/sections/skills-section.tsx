@@ -95,11 +95,12 @@ const skillCategories = [
     title: "Tools & Technologies",
     skills: [
       { title: "Microsoft Excel (Advanced)", percentage: 95 },
-      { title: "Power BI / Dashboards", percentage: 90, icon: <BarChart3 className="h-4 w-4" /> },
+      { title: "Power BI (Dashboards)", percentage: 90, icon: <BarChart3 className="h-4 w-4" /> },
       { title: "SQL (MySQL, PostgreSQL)", percentage: 88, icon: <Database className="h-4 w-4" /> },
       { title: "JIRA / Confluence", percentage: 85, icon: <Settings className="h-4 w-4" /> },
       { title: "Tableau", percentage: 72, icon: <PieChart className="h-4 w-4" /> },
       { title: "UML / Use Case Diagrams", percentage: 80, icon: <Shapes className="h-4 w-4" /> },
+      { title: "Python", percentage: 75, icon: <Shapes className="h-4 w-4" /> },
     ],
   },
   {
@@ -115,12 +116,11 @@ const skillCategories = [
   },
 ]
 
-
 const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="py-16 md:py-28 bg-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-500"
+      className="py-16 md:py-28 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 relative overflow-hidden transition-colors duration-500"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent" />
 
@@ -138,7 +138,6 @@ const SkillsSection = () => {
             My Skills
           </h2>
         </div>
-
 
         <div className="p-6 md:p-10 rounded-xl bg-white dark:bg-[#030712] backdrop-blur-sm border border-gray-200 dark:border-white/10 shadow-xl transition-colors duration-300">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

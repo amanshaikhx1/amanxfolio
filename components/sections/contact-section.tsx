@@ -80,18 +80,17 @@ const ContactSection = () => {
 
     try {
       const templateParams = {
-  name: formData.name,       // ✅
-  email: formData.email,     // ✅
-  subject: formData.subject,
-  message: formData.message,
-}
-
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      }
 
       await emailjs.send(
-        "service_kdkvhwp",     // 👈 Replace with your EmailJS service ID
-        "template_g480zja",    // 👈 Replace with your EmailJS template ID
+        "service_kdkvhwp",     // Replace with your EmailJS service ID
+        "template_g480zja",    // Replace with your EmailJS template ID
         templateParams,
-        "zdgMEBQYq8larefXL"    // 👈 Replace with your public key
+        "zdgMEBQYq8larefXL"    // Replace with your public key
       )
 
       setSubmitStatus({
@@ -153,7 +152,7 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="min-h-[auto] md:min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4 py-8 md:py-12"
+      className="min-h-[auto] md:min-h-screen flex items-center justify-center bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 px-4 py-8 md:py-12"
     >
       <div className="container mx-auto px-5 relative z-10 max-w-5xl">
         {/* Heading */}
@@ -192,7 +191,7 @@ const ContactSection = () => {
 
           {/* Contact Form */}
           <motion.div
-            className="w-full lg:max-w-3xl p-10 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700/50"
+            className="w-full lg:max-w-3xl p-10 rounded-xl bg-white dark:bg-gray-800/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700/50"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}

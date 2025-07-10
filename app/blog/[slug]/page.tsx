@@ -1,45 +1,48 @@
-import { notFound } from "next/navigation"
-import { getBlogPost } from "./getBlogPost"
-import BlogPostClient from "./BlogPostClient"
+import { notFound } from "next/navigation";
+import { getBlogPost } from "./getBlogPost";
+import BlogPostClient from "./BlogPostClient";
 
-// Add this function right after the imports and before the main component
+/* Static Params for SSG */
 export async function generateStaticParams() {
-  // Define all the blog slugs that should be statically generated
   const blogSlugs = [
-    "ui-ux-design-principles",
-    "introduction-to-artificial-intelligence",
-    "junior-to-senior-developer-roadmap",
-    "react-server-components",
-    "website-performance-optimization",
-    "building-accessible-web-applications",
-    "future-web-development-trends", // Added this missing slug
-    "javascript-best-practices",
+    "user-stories-business-data-analysts",
+    "how-tableau-helps-business-data-analysis",
+    "data-cleaning-tips-for-analysts",
+    "business-data-analysts-ecommerce-growth-india",
+    "data-visualization-for-business-analysts",
+    "real-time-dashboards-for-business-analysts",
+    "stakeholder-collaboration-in-business-data-analysis",
+    "data-analyst-product-development-insights",
     "css-grid-vs-flexbox",
     "modern-frontend-frameworks",
-  ]
+  ];
 
-  return blogSlugs.map((slug) => ({
-    slug: slug,
-  }))
+  return blogSlugs.map((slug) => ({ slug }));
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug)
+/* Fix #1: DO NOT destructure params directly */
+export default async function BlogPostPage(props: {
+  params: { slug: string };
+}) {
+  const { params } = props;
+  const post = await getBlogPost(params.slug);
 
-  if (!post) {
-    notFound()
-  }
+  if (!post) notFound();
 
-  return <BlogPostClient post={post} />
+  return <BlogPostClient post={post} />;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug)
+/* Fix #2: generateMetadata with same pattern */
+export async function generateMetadata(props: {
+  params: { slug: string };
+}) {
+  const { params } = props;
+  const post = await getBlogPost(params.slug);
 
   if (!post) {
     return {
       title: "Blog Post Not Found",
-    }
+    };
   }
 
   return {
@@ -50,5 +53,5 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: post.excerpt,
       images: post.image ? [post.image] : [],
     },
-  }
+  };
 }

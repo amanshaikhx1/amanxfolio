@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight, Calendar, Clock, Search } from "lucide-react"
+import { ArrowRight, Calendar, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -15,144 +15,133 @@ import Footer from "@/components/layout/footer"
 const blogData = [
   {
     id: "1",
-    title: "10 Essential UI/UX Design Principles Every Developer Should Know",
-    slug: "ui-ux-design-principles",
-    content: "User Interface (UI) and User Experience (UX) design are critical components...",
+    title: "Understanding the Role of User Stories in Business Data Analytics",
+    slug: "user-stories-business-data-analysts",
+    content: "Explore how user stories help Business Data Analysts align data tasks with business goals, with practical examples and tips for mastering them in India’s analytics market.",
     excerpt:
-      "Learn the fundamental UI/UX design principles that every developer should master to create better user experiences.",
-    category: "Design",
+      "Explore how user stories help Business Data Analysts align data tasks with business goals, with practical examples and tips for mastering them in India’s analytics market.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "blog.webp",
-    readTime: "5 min read",
-    tags: ["Design", "UI/UX", "Web Development"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/1 blog.jpg",
     date: {
-      day: "15",
-      month: "Jan",
-      year: "2024",
+      day: "09",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2024-01-15T10:00:00Z",
   },
   {
     id: "2",
-    title: "Introduction to Artificial Intelligence: The Future is Now",
-    slug: "introduction-to-artificial-intelligence",
-    content: "Artificial Intelligence (AI) is no longer a concept confined to science fiction...",
+    title: "How Tableau Transforms Business Data into Actionable Insights",
+    slug: "how-tableau-helps-business-data-analysis",
+    content: "Discover why Tableau is a must-have tool for Business Data Analysts, its key features, integration with SQL and Agile, and beginner tips to master it in India’s competitive job market.",
     excerpt:
-      "Explore the world of Artificial Intelligence, its types, current applications, and what the future holds for this transformative technology.",
-    category: "Technology",
+      "Discover why Tableau is a must-have tool for Business Data Analysts, its key features, integration with SQL and Agile, and beginner tips to master it in India’s competitive job market.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=Artificial+Intelligence",
-    readTime: "8 min read",
-    tags: ["AI", "Technology", "Machine Learning"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/2 blog.jpg",
     date: {
       day: "10",
-      month: "Jan",
-      year: "2024",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2024-01-10T14:30:00Z",
   },
   {
     id: "3",
-    title: "From Junior to Senior Developer: A Roadmap for Career Growth",
-    slug: "junior-to-senior-developer-roadmap",
-    content: "Navigating the path from junior to senior developer requires more than just technical skills...",
+    title: "The Role of Data Cleaning in Effective Business Data Analysis",
+    slug: "data-cleaning-tips-for-analysts",
+    content: "Learn why clean data is essential for accurate analysis and how Business Data Analysts use SQL to remove errors, duplicates, and inconsistencies.",
     excerpt:
-      "A comprehensive guide to advancing from junior to senior developer, covering technical skills, soft skills, and career strategies.",
-    category: "Career",
+      "Learn why clean data is essential for accurate analysis and how Business Data Analysts use SQL to remove errors, duplicates, and inconsistencies.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=Career+Growth",
-    readTime: "6 min read",
-    tags: ["Career", "Development", "Skills"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/3 blog.jpg",
     date: {
-      day: "05",
-      month: "Jan",
-      year: "2024",
+      day: "10",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2024-01-05T09:15:00Z",
   },
   {
     id: "4",
-    title: "Understanding React Server Components",
-    slug: "react-server-components",
-    content: "React Server Components represent a paradigm shift in how we build React applications...",
+    title: "How Business Data Analysts Support E-Commerce Growth in India",
+    slug: "business-data-analysts-ecommerce-growth-india",
+    content: "Discover how Business Data Analysts drive growth for Indian e-commerce giants like Amazon & Zomato using SQL, Power BI & Agile insights.",
     excerpt:
-      "Learn about React Server Components, how they work, their benefits, and when to use them in your applications.",
-    category: "React",
+      "Discover how Business Data Analysts drive growth for Indian e-commerce giants like Amazon & Zomato using SQL, Power BI & Agile insights.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=React+Server+Components",
-    readTime: "7 min read",
-    tags: ["React", "JavaScript", "Frontend"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/4 blog.jpg",
     date: {
-      day: "01",
-      month: "Jan",
-      year: "2024",
+      day: "10",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2024-01-01T16:45:00Z",
   },
   {
     id: "5",
-    title: "Optimizing Website Performance: A Developer's Guide",
-    slug: "website-performance-optimization",
-    content: "Website performance directly impacts user experience, conversion rates, and search engine rankings...",
+    title: "How Business Data Analysts Use Data Visualization to Influence Stakeholders",
+    slug: "data-visualization-for-business-analysts",
+    content: "Discover how Business Data Analysts use Tableau & Power BI to visualize data, tell compelling stories, and influence business decisions effectively.",
     excerpt:
-      "Learn practical techniques for optimizing website performance, improving Core Web Vitals, and creating lightning-fast web experiences.",
-    category: "Performance",
+      "Discover how Business Data Analysts use Tableau & Power BI to visualize data, tell compelling stories, and influence business decisions effectively.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=Website+Performance",
-    readTime: "9 min read",
-    tags: ["Performance", "Web Development", "Optimization"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/5 blog.jpg",
     date: {
-      day: "28",
-      month: "Dec",
-      year: "2023",
+      day: "10",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2023-12-28T11:20:00Z",
   },
   {
     id: "6",
-    title: "Building Accessible Web Applications",
-    slug: "building-accessible-web-applications",
-    content: "Web accessibility ensures that websites and applications are usable by everyone...",
+    title: "How Business Data Analysts Use Dashboards to Monitor Real-Time Business Metrics",
+    slug: "real-time-dashboards-for-business-analysts",
+    content: "Learn how Business Data Analysts use Power BI & Tableau to build real-time dashboards that track sales, traffic, and KPIs for fast business decisions.",
     excerpt:
-      "Learn how to build accessible web applications that work for everyone, covering WCAG guidelines, ARIA, testing strategies, and implementation techniques.",
-    category: "Accessibility",
+      "Learn how Business Data Analysts use Power BI & Tableau to build real-time dashboards that track sales, traffic, and KPIs for fast business decisions.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=Web+Accessibility",
-    readTime: "12 min read",
-    tags: ["Accessibility", "Web Development", "Inclusive Design"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/6 blog.jpg",
     date: {
-      day: "25",
-      month: "Dec",
-      year: "2023",
+      day: "10",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2023-12-25T13:10:00Z",
   },
   {
     id: "7",
-    title: "Future Web Development Trends: What's Coming Next",
-    slug: "future-web-development-trends",
+    title: "The Role of Stakeholder Collaboration in Business Data Analysis",
+    slug: "stakeholder-collaboration-in-business-data-analysis",
     content:
-      "The web development landscape is constantly evolving, with new technologies, frameworks, and paradigms emerging regularly...",
+      "Learn how Business Data Analysts work with stakeholders to gather needs, build aligned dashboards, and deliver insights that drive real business impact.",
     excerpt:
-      "Explore the cutting-edge trends shaping the future of web development, from AI-powered coding to WebAssembly, edge computing, and beyond.",
-    category: "Technology",
+      "Learn how Business Data Analysts work with stakeholders to gather needs, build aligned dashboards, and deliver insights that drive real business impact.",
     author: "Aman Shaikh",
-    authorImage: "/placeholder.svg?height=30&width=30",
-    image: "/placeholder.svg?height=400&width=600&text=Future+Web+Development",
-    readTime: "15 min read",
-    tags: ["Future Tech", "Web Development", "AI", "WebAssembly", "Trends"],
+    authorImage: "/aman.jpg",
+    image: "/blog img/7 blog.jpg",
     date: {
-      day: "20",
-      month: "Jan",
-      year: "2024",
+      day: "11",
+      month: "July",
+      year: "2025",
     },
-    publishedAt: "2024-01-20T12:00:00Z",
+  },
+  {
+    id: "8",
+    title: "How Business Data Analysts Use Data to Enhance Product Development",
+    slug: "data-analyst-product-development-insights",
+    content:
+      "Discover how Business Data Analysts use SQL and dashboards to improve product features through data insights in Agile tech teams like Swiggy.",
+    excerpt:
+      "Discover how Business Data Analysts use SQL and dashboards to improve product features through data insights in Agile tech teams like Swiggy.",
+    author: "Aman Shaikh",
+    authorImage: "/aman.jpg",
+    image: "/blog img/8 blog.jpg",
+    date: {
+      day: "11",
+      month: "July",
+      year: "2025",
+    },
   },
 ]
 
@@ -162,18 +151,14 @@ interface BlogPost {
   slug: string
   content: string
   excerpt: string
-  category: string
   author: string
   authorImage: string
   image: string
-  readTime: string
-  tags: string[]
   date: {
     day: string
     month: string
     year: string
   }
-  publishedAt: string
 }
 
 interface PaginationInfo {
@@ -204,9 +189,7 @@ export default function BlogPage() {
         (blog) =>
           blog.title.toLowerCase().includes(searchLower) ||
           blog.content.toLowerCase().includes(searchLower) ||
-          blog.excerpt.toLowerCase().includes(searchLower) ||
-          blog.category.toLowerCase().includes(searchLower) ||
-          blog.tags.some((tag) => tag.toLowerCase().includes(searchLower)),
+          blog.excerpt.toLowerCase().includes(searchLower)
       )
     }
 
@@ -261,21 +244,21 @@ export default function BlogPage() {
       <Header />
 
       <main className="pt-32 pb-20">
-          {/* Page Title */}
-          <div className="container mx-auto px-5">
-        <div className="text-center mb-16">
-          {/* Subtitle badge (My Blog) */}
-          <div className="mb-4">
-            <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
-              My Blog
-            </span>
-          </div>
+        {/* Page Title */}
+        <div className="container mx-auto px-5">
+          <div className="text-center mb-16">
+            {/* Subtitle badge (My Blog) */}
+            <div className="mb-4">
+              <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-green-500/10 text-green-500 dark:text-green-500">
+                My Blog
+              </span>
+            </div>
 
-          {/* Main heading (Latest Articles) with underline */}
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-20 after:h-1 after:bg-green-500 after:mx-auto">
-            Latest Articles
-          </h2>
-        </div>
+            {/* Main heading (Latest Articles) with underline */}
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-20 after:h-1 after:bg-green-500 after:mx-auto">
+              Latest Articles
+            </h2>
+          </div>
 
           <div className="flex flex-col gap-10">
             {/* Main Content */}
@@ -321,7 +304,6 @@ export default function BlogPage() {
                       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
                         <div className="md:w-2/5 h-60 md:h-auto bg-gray-300 dark:bg-gray-700"></div>
                         <div className="md:w-3/5 p-6 space-y-4">
-                          <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
                           <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
                           <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded"></div>
                           <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
@@ -347,7 +329,7 @@ export default function BlogPage() {
                     {blogPosts.map((post) => (
                       <article
                         key={post.id}
-                        className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                        className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row"
                       >
                         <div className="md:w-2/5 relative h-60 md:h-auto">
                           <Image
@@ -360,19 +342,10 @@ export default function BlogPage() {
                         </div>
                         <div className="md:w-3/5 p-6 flex flex-col">
                           <div className="flex justify-between items-center mb-3 text-sm">
-                            <span className="text-green-500 font-medium relative pl-4 before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-2.5 before:h-2.5 before:bg-green-500 before:rounded-full">
-                              {post.category}
+                            <span className="text-gray-500 dark:text-gray-400 flex items-center">
+                              <Calendar className="h-4 w-4 mr-1 text-green-500" />
+                              {post.date.month} {post.date.day}, {post.date.year}
                             </span>
-                            <div className="flex items-center gap-4">
-                              <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                                <Calendar className="h-4 w-4 mr-1 text-green-500" />
-                                {post.date.month} {post.date.day}, {post.date.year}
-                              </span>
-                              <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                                <Clock className="h-4 w-4 mr-1 text-green-500" />
-                                {post.readTime}
-                              </span>
-                            </div>
                           </div>
 
                           <h2 className="text-xl md:text-2xl font-semibold mb-3 line-clamp-2 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">

@@ -14,11 +14,11 @@ interface BlogPost {
   slug: string
   content: string
   excerpt: string
-  category: string
+  category?: string
   author: string
   authorImage: string
   image: string
-  readTime: string
+  readTime?: string
   tags: string[]
   date: {
     day: string
@@ -114,7 +114,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
 
           {/* Article Header */}
           <header className="mb-8">
-            <div className="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400">
+            {/* <div className="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400">
               <span className="flex items-center gap-1">
                 <Tag className="h-4 w-4 text-green-500" />
                 {post.category}
@@ -127,7 +127,7 @@ export default function BlogPostClient({ post }: { post: BlogPost }) {
                 <Clock className="h-4 w-4 text-green-500" />
                 {post.readTime}
               </span>
-            </div>
+            </div> */}
 
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
               {post.title}

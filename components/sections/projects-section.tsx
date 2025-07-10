@@ -10,7 +10,7 @@ const portfolioItems = [
     id: "portfolio-1",
     title: "Work in progress",
     category: "---",
-    image: "/project.webp",
+    image: "/P1.webp",
     // client: "ABC Company",
     date: "---",
     tech: "---",
@@ -21,19 +21,18 @@ const portfolioItems = [
     id: "portfolio-2",
     title: "Work in progress",
     category: "---",
-    image: "/project.webp",
+    image: "/P2.webp",
     // client: "---",
     date: "---",
     tech: "---",
     description: "Work in progress, Projects will be added soon.",
     link: "https://projectaddsoon.com",
-
   },
   {
     id: "portfolio-3",
     title: "Work in progress",
     category: "---",
-    image: "/project.webp",
+    image: "/P3.webp",
     // client: "StartUp Inc.",
     date: "---",
     tech: "---",
@@ -82,7 +81,7 @@ const PortfolioSection = () => {
   }
 
   return (
-    <section id="portfolio" className="py-20 md:py-32 bg-gray-100 dark:bg-gray-900 overflow-hidden">
+    <section id="portfolio" className="py-20 md:py-32 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           {/* Badge */}
@@ -97,7 +96,6 @@ const PortfolioSection = () => {
             Projects
           </h2>
         </div>
-
 
         <motion.div
           variants={containerVariants}
@@ -184,7 +182,6 @@ const PortfolioSection = () => {
                   <X className="w-5 h-5" />
                 </button>
 
-
                 <div className="flex flex-col md:flex-row gap-6 p-6 overflow-y-auto">
                   <div className="md:w-1/2 w-full">
                     <img
@@ -232,7 +229,6 @@ const PortfolioSection = () => {
                         View Project
                       </a>
                     )}
-
                   </div>
                 </div>
               </motion.div>

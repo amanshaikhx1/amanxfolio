@@ -8,14 +8,14 @@ const educationData = [
   {
     year: "2024 - 2027",
     degree: "Bachelor of Computer Applications",
-    university: "Amity University Online",
+    university: "Amity University",
     description:
       "Currently pursuing BCA with a strong focus on understanding business systems, data handling, and analytical thinking. Gaining hands-on exposure to Excel, SQL, and basic system concepts useful for business analysis. Also working on self-driven projects and certifications to strengthen practical skills.",
   },
   {
     year: "2027 - 2029",
     degree: "Master of Business Administration",
-    university: "Amity University Online",
+    university: "Amity University",
     description:
       "Planning to pursue MBA with a focus on business analysis, stakeholder management, and data-driven decision-making. Aim is to build deeper understanding of business domains and leadership-level BA capabilities.",
   },
@@ -31,7 +31,7 @@ const educationData = [
 const experienceData = [
   {
     year: "2024",
-    position: "Aspiring Business Analyst – Learning in Progress",
+    position: "Aspiring Business Data Analyst – Learning in Progress",
     company: "Independent / Self-Paced",
     description:
       "Currently building a strong foundation in business analysis through self-study and academics. Exploring core BA concepts like requirement gathering, business processes, and stakeholder communication, along with tools like Excel, Power BI, and SQL.",
@@ -45,7 +45,7 @@ const experienceData = [
   },
   {
     year: "2027 (Planned)",
-    position: "Entry-Level Business Analyst Role",
+    position: "Entry-Level Business Data Analyst Role",
     company: "Target: Fintech / E-commerce / Consulting Domains",
     description:
       "Aiming to apply academic and project-based learning in a real-world environment. Will focus on documenting business requirements, working with cross-functional teams, and supporting product and data-driven decisions.",

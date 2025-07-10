@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import HeavyBackgroundAnimation from "@/components/heavy-background-animation";
+import SpaceBackground from "@/components/heavy-background-animation"; // Updated import to match exported name
 
 const TypeAnimation = dynamic(
   () => import("react-type-animation").then((mod) => mod.TypeAnimation),
@@ -37,7 +37,7 @@ const HomeSection = () => {
 
   return (
     <section id="home" className="relative flex items-center min-h-screen w-full overflow-hidden">
-      <HeavyBackgroundAnimation />
+      <SpaceBackground /> {/* Updated to match exported name */}
 
       {/* Scroll Indicator */}
       <div
@@ -72,11 +72,11 @@ const HomeSection = () => {
               <span className="text-green-500 font-semibold ml-2 relative">
                 <TypeAnimation
                   sequence={[
-                    "Business Analyst.",
+                    "Business Data Analyst.",
                     2000,
-                    "Agile Business Analyst.",
+                    "Data-Driven Decisions.",
                     2000,
-                    "ECBA® Aspirant.",
+                    "Empowering Business with Data",
                     2000,
                   ]}
                   speed={50}
@@ -128,7 +128,7 @@ const HomeSection = () => {
               <div className="relative rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden border-2 border-white/30 dark:border-gray-800/50 shadow-2xl animate-morph bg-white/10 dark:bg-gray-900/50 backdrop-blur-sm">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10 mix-blend-overlay"></div>
                 <Image
-                  src="/aman.webp"
+                  src="/aman.jpg"
                   alt="Aman Shaikh"
                   width={400}
                   height={400}
