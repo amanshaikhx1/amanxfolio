@@ -117,21 +117,21 @@ const ContactSection = () => {
   }
 
   const socialLinks = [
-    {
-      icon: <Facebook className="h-5 w-5" />,
-      href: "#",
-      label: "Facebook",
-      color: "hover:bg-blue-600",
-    },
-    {
-      icon: <Twitter className="h-5 w-5" />,
-      href: "#",
-      label: "Twitter",
-      color: "hover:bg-blue-400",
-    },
+    // {
+    //   icon: <Facebook className="h-5 w-5" />,
+    //   href: "#",
+    //   label: "Facebook",
+    //   color: "hover:bg-blue-600",
+    // },
+    // {
+    //   icon: <Twitter className="h-5 w-5" />,
+    //   href: "#",
+    //   label: "Twitter",
+    //   color: "hover:bg-blue-400",
+    // },
     {
       icon: <Instagram className="h-5 w-5" />,
-      href: "#",
+      href: "https://www.instagram.com/0x.amxo?igsh=MXhienF6bHE4cWJmcg==",
       label: "Instagram",
       color: "hover:bg-pink-600",
     },
@@ -143,7 +143,7 @@ const ContactSection = () => {
     },
     {
       icon: <Github className="h-5 w-5" />,
-      href: "#",
+      href: "https://github.com/amanshaikhx1",
       label: "GitHub",
       color: "hover:bg-gray-800",
     },

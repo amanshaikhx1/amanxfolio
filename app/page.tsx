@@ -14,6 +14,15 @@ const ContactSection = dynamic(() => import("@/components/sections/contact-secti
 const Footer = dynamic(() => import("@/components/layout/footer"), { ssr: true })
 const BackToTop = dynamic(() => import("@/components/back-to-top"), { ssr: true })
 
+export const metadata = {
+  title: "My Portfolio",
+  description: "This is my portfolio site.",
+  icons: {
+    icon: "/aman.jpg",
+  },
+};
+
+
 
 export default function Home() {
   return (
