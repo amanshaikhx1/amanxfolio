@@ -20,6 +20,10 @@ export const metadata = {
   icons: {
     icon: "/aman.png",
   },
+  metadataBase: new URL("https://amanxfolio.in"),
+  alternates: {
+    canonical: "/"
+  }
 };
 
 
