@@ -18,10 +18,9 @@ export const metadata = {
   title: "AmanxFolio",
   description: "This is my portfolio site.",
   icons: {
-    icon: "/aman.jpg",
+    icon: "/aman.png",
   },
 };
-
 
 
 export default function Home() {
