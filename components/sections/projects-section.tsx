@@ -15,7 +15,7 @@ const portfolioItems = [
     date: "---",
     tech: "---",
     description: "Work in progress, Projects will be added soon.",
-    link: "https://projectaddsoon.com",
+    link: "https://projectsaddsoon.com",
   },
   {
     id: "portfolio-2",
@@ -26,7 +26,6 @@ const portfolioItems = [
     date: "---",
     tech: "---",
     description: "Work in progress, Projects will be added soon.",
-    link: "https://projectaddsoon.com",
   },
   {
     id: "portfolio-3",
@@ -37,11 +36,11 @@ const portfolioItems = [
     date: "---",
     tech: "---",
     description: "Work in progress, Projects will be added soon.",
-    link: "https://projectaddsoon.com",
+    link: "https://projectsaddsoon.com",
   },
 ]
 
-const PortfolioSection = () => {
+const ProjectsSection = () => {
   const [selectedItem, setSelectedItem] = useState<typeof portfolioItems[0] | null>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [showButtonId, setShowButtonId] = useState<string | null>(null)
@@ -81,7 +80,7 @@ const PortfolioSection = () => {
   }
 
   return (
-    <section id="portfolio" className="py-20 md:py-32 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 overflow-hidden">
+    <section id="projects" className="py-20 md:py-32 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           {/* Badge */}
@@ -240,4 +239,4 @@ const PortfolioSection = () => {
   )
 }
 
-export default PortfolioSection
+export default ProjectsSection
