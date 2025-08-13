@@ -51,7 +51,7 @@ const AboutSection = () => {
           >
             <div className="relative inline-block">
               <Image
-                src="/amanx01.webp"
+                src="/amansk.jpg"
                 alt="Aman Shaikh profile"
                 width={400}
                 height={500}

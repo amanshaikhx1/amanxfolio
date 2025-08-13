@@ -132,25 +132,52 @@ const Header = () => {
     >
       <div className="container mx-auto px-5">
         <nav className={cn("flex items-center justify-between py-5 transition-all", isScrolled && "py-3")}>
-          <Link href="/" className="text-2xl font-bold flex items-center z-60 text-white hover:text-green-500 transition-colors" onClick={closeMobileMenu}>
-            <div className="relative w-12 h-12 mr-3 flex-shrink-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 rounded-lg rotate-45 animate-pulse-slow"></div>
-              <div className="absolute inset-1 bg-black rounded-lg rotate-45"></div>
-              <div className="absolute inset-0 w-full h-full flex items-center justify-center">
-                <span className="text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text font-bold text-2xl animate-pulse-slow">
-                  A
+          <div className="group cursor-pointer flex items-center space-x-3" onClick={closeMobileMenu}>
+            {/* Compact Logo Icon */}
+            <div className="relative w-14 h-14 flex-shrink-0"> {/* w-10 h-10 → w-14 h-14 */}
+              {/* Outer glow ring */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-xl blur-sm opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+
+              {/* Main logo container */}
+              <div className="relative w-full h-full bg-gradient-to-br from-slate-900 to-black rounded-xl border border-slate-600/50 overflow-hidden">
+                {/* Animated background pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-600/10 animate-pulse"></div>
+                {/* Geometric elements */}
+                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-bounce"></div>
+                <div
+                  className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.5s" }}
+                ></div>
+                {/* Central letter A */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                    A
+                  </span>
+                </div>
+                {/* Corner accents */}
+                <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/60 rounded-tl-lg opacity-40"></div>
+                <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-purple-500/60 rounded-br-lg opacity-40"></div>
+              </div>
+            </div>
+            {/* Compact Text */}
+            <div className="flex flex-col space-y-0.5">
+              <div className="flex items-center space-x-1.5">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-200 bg-clip-text text-transparent group-hover:from-cyan-400 group-hover:via-blue-400 group-hover:to-purple-400 transition-all duration-300">
+                  AmanxFolio
+                </h1>
+                <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+              </div>
+
+              <div className="flex items-center space-x-1.5">
+                <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div>
+                <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors duration-300">
+                  Business Data Analyst
                 </span>
               </div>
-              <div className="absolute top-0 right-0 w-3 h-3 bg-green-400 rounded-full animate-pulse-slow"></div>
-              <div className="absolute bottom-0 left-0 w-3 h-3 bg-blue-500 rounded-full animate-pulse-slow animation-delay-1000"></div>
             </div>
-            <div className="flex flex-col">
-              <span className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent font-bold leading-none">
-                AmanxFolio
-              </span>
-              <span className="text-xs text-gray-400">Business Data Analyst</span>
-            </div>
-          </Link>
+          </div>
+
+
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-7">
@@ -180,25 +207,50 @@ const Header = () => {
               <div className="flex flex-col h-full bg-black">
                 {/* Header in Mobile Menu */}
                 <div className="flex items-center justify-between p-6 border-b border-white/10 bg-black">
-                  <Link href="/" className="text-2xl font-bold flex items-center text-white hover:text-green-500 transition-colors" onClick={closeMobileMenu}>
-                    <div className="relative w-12 h-12 mr-3 flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 rounded-lg rotate-45 animate-pulse-slow"></div>
-                      <div className="absolute inset-1 bg-black rounded-lg rotate-45"></div>
-                      <div className="absolute inset-0 w-full h-full flex items-center justify-center">
-                        <span className="text-transparent bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text font-bold text-2xl animate-pulse-slow">
-                          A
+                  <div className="group cursor-pointer flex items-center space-x-3" onClick={closeMobileMenu}>
+                    {/* Compact Logo Icon */}
+                    <div className="relative w-14 h-14 flex-shrink-0"> {/* w-10 h-10 → w-14 h-14 */}
+                      {/* Outer glow ring */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-xl blur-sm opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+
+                      {/* Main logo container */}
+                      <div className="relative w-full h-full bg-gradient-to-br from-slate-900 to-black rounded-xl border border-slate-600/50 overflow-hidden">
+                        {/* Animated background pattern */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-600/10 animate-pulse"></div>
+                        {/* Geometric elements */}
+                        <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-bounce"></div>
+                        <div
+                          className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.5s" }}
+                        ></div>
+                        {/* Central letter A */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                            A
+                          </span>
+                        </div>
+                        {/* Corner accents */}
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/60 rounded-tl-lg opacity-40"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-purple-500/60 rounded-br-lg opacity-40"></div>
+                      </div>
+                    </div>
+                    {/* Compact Text */}
+                    <div className="flex flex-col space-y-0.5">
+                      <div className="flex items-center space-x-1.5">
+                        <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-200 bg-clip-text text-transparent group-hover:from-cyan-400 group-hover:via-blue-400 group-hover:to-purple-400 transition-all duration-300">
+                          AmanxFolio
+                        </h1>
+                        <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+                      </div>
+
+                      <div className="flex items-center space-x-1.5">
+                        <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div>
+                        <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors duration-300">
+                          Business Data Analyst
                         </span>
                       </div>
-                      <div className="absolute top-0 right-0 w-3 h-3 bg-green-400 rounded-full animate-pulse-slow"></div>
-                      <div className="absolute bottom-0 left-0 w-3 h-3 bg-blue-500 rounded-full animate-pulse-slow animation-delay-1000"></div>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent font-bold leading-none">
-                        AmanxFolio
-                      </span>
-                      <span className="text-xs text-gray-400">Business Data Analyst</span>
-                    </div>
-                  </Link>
+                  </div>
                   <button
                     onClick={closeMobileMenu}
                     className="text-white hover:text-gray-300 transition-colors"

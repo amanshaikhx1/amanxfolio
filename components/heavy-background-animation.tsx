@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
 
-const SpaceBackground = () => {
+const PremiumBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [mounted, setMounted] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
@@ -54,134 +54,478 @@ const SpaceBackground = () => {
     }
 
     const initBackground = () => {
-      // Galaxy-like gradient background
-      const gradient = ctx!.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, "rgba(20, 10, 40, 1)") // Deep purple
-      gradient.addColorStop(0.3, "rgba(30, 20, 60, 1)") // Dark blue
-      gradient.addColorStop(0.6, "rgba(50, 30, 80, 1)") // Medium purple
-      gradient.addColorStop(1, "rgba(70, 40, 100, 1)") // Lighter purple with hint of pink
-      ctx!.fillStyle = gradient
+      const mainGradient = ctx!.createRadialGradient(
+        window.innerWidth * 0.5,
+        window.innerHeight * 0.5,
+        0,
+        window.innerWidth * 0.5,
+        window.innerHeight * 0.5,
+        Math.max(window.innerWidth, window.innerHeight) * 0.7,
+      )
+
+      mainGradient.addColorStop(0, "rgba(8, 20, 45, 1)") // Deep blue center
+      mainGradient.addColorStop(0.3, "rgba(0, 0, 0, 1)") // Pure black
+      mainGradient.addColorStop(0.6, "rgba(0, 15, 8, 0.3)") // Much less green
+      mainGradient.addColorStop(1, "rgba(0, 0, 0, 1)") // Pure black edges
+
+      ctx!.fillStyle = mainGradient
       ctx!.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
-      // Faint nebula effects
-      const nebula1 = {
-        x: window.innerWidth * 0.3,
-        y: window.innerHeight * 0.4,
-        size: 200,
-        color: "rgba(150, 80, 180, 0.1)" // Soft purple nebula
-      }
-      const nebula2 = {
-        x: window.innerWidth * 0.7,
-        y: window.innerHeight * 0.6,
-        size: 250,
-        color: "rgba(100, 60, 140, 0.08)" // Soft pinkish-purple nebula
-      }
+      const accents = [
+        {
+          x: window.innerWidth * 0.3,
+          y: window.innerHeight * 0.2,
+          radius: 400,
+          color: "rgba(0, 120, 255, 0.08)", // Enhanced blue
+        },
+        {
+          x: window.innerWidth * 0.7,
+          y: window.innerHeight * 0.8,
+          radius: 350,
+          color: "rgba(0, 100, 50, 0.02)", // Much less green
+        },
+      ]
 
-      ctx!.beginPath()
-      const nebulaGradient1 = ctx!.createRadialGradient(nebula1.x, nebula1.y, 0, nebula1.x, nebula1.y, nebula1.size)
-      nebulaGradient1.addColorStop(0, nebula1.color)
-      nebulaGradient1.addColorStop(1, "rgba(0, 0, 0, 0)")
-      ctx!.fillStyle = nebulaGradient1
-      ctx!.arc(nebula1.x, nebula1.y, nebula1.size, 0, Math.PI * 2)
-      ctx!.fill()
-
-      ctx!.beginPath()
-      const nebulaGradient2 = ctx!.createRadialGradient(nebula2.x, nebula2.y, 0, nebula2.x, nebula2.y, nebula2.size)
-      nebulaGradient2.addColorStop(0, nebula2.color)
-      nebulaGradient2.addColorStop(1, "rgba(0, 0, 0, 0)")
-      ctx!.fillStyle = nebulaGradient2
-      ctx!.arc(nebula2.x, nebula2.y, nebula2.size, 0, Math.PI * 2)
-      ctx!.fill()
+      accents.forEach((accent) => {
+        const gradient = ctx!.createRadialGradient(accent.x, accent.y, 0, accent.x, accent.y, accent.radius)
+        gradient.addColorStop(0, accent.color)
+        gradient.addColorStop(1, "rgba(0, 0, 0, 0)")
+        ctx!.fillStyle = gradient
+        ctx!.fillRect(0, 0, window.innerWidth, window.innerHeight)
+      })
     }
 
-    class Star {
+    class ElegantParticle {
       x: number
       y: number
       size: number
-      color: string
+      opacity: number
       velocityX: number
       velocityY: number
+      color: string
+      pulsePhase: number
+      rotationSpeed: number
+      orbitRadius: number
+      orbitAngle: number
+      baseX: number
+      baseY: number
+      floatOffset: number
+      scalePhase: number
 
       constructor() {
         this.x = Math.random() * window.innerWidth
         this.y = Math.random() * window.innerHeight
-        this.size = Math.random() * 2 + 0.5
-        const colorType = Math.random()
-        this.color = colorType > 0.7 ? `rgba(200, 220, 255, 0.8)` : colorType > 0.4 ? `rgba(255, 255, 220, 0.8)` : `rgba(255, 255, 255, 0.8)`
-        this.velocityX = (Math.random() - 0.5) * 0.2
-        this.velocityY = (Math.random() - 0.5) * 0.2
+        this.size = Math.random() * 2 + 1
+        this.opacity = Math.random() * 0.4 + 0.2
+        this.velocityX = (Math.random() - 0.5) * 1.2
+        this.velocityY = (Math.random() - 0.5) * 1.2
+        this.pulsePhase = Math.random() * Math.PI * 2
+
+        this.rotationSpeed = (Math.random() - 0.5) * 0.02
+        this.orbitRadius = Math.random() * 30 + 10
+        this.orbitAngle = Math.random() * Math.PI * 2
+        this.baseX = this.x
+        this.baseY = this.y
+        this.floatOffset = Math.random() * Math.PI * 2
+        this.scalePhase = Math.random() * Math.PI * 2
+
+        if (Math.random() < 0.1) {
+          this.color = "rgba(0, 120, 80, "
+        } else {
+          const colors = [
+            "rgba(0, 140, 255, ", // Enhanced blue
+            "rgba(100, 180, 255, ", // Light blue
+          ]
+          this.color = colors[Math.floor(Math.random() * colors.length)]
+        }
       }
 
       draw() {
+        const pulse = Math.sin(this.pulsePhase) * 0.4 + 0.7
+        const scalePulse = Math.sin(this.scalePhase) * 0.2 + 0.9
+        const currentSize = this.size * pulse * scalePulse
+
+        const glowIntensity = Math.sin(this.pulsePhase * 0.7) * 0.3 + 0.7
+        const glowGradient = ctx!.createRadialGradient(this.x, this.y, 0, this.x, this.y, currentSize * 4)
+        glowGradient.addColorStop(0, this.color + this.opacity * glowIntensity + ")")
+        glowGradient.addColorStop(0.3, this.color + this.opacity * 0.5 * glowIntensity + ")")
+        glowGradient.addColorStop(0.7, this.color + this.opacity * 0.2 * glowIntensity + ")")
+        glowGradient.addColorStop(1, this.color + "0)")
+
+        ctx!.fillStyle = glowGradient
         ctx!.beginPath()
-        ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-        ctx!.fillStyle = this.color
+        ctx!.arc(this.x, this.y, currentSize * 4, 0, Math.PI * 2)
+        ctx!.fill()
+
+        const coreOpacity = this.opacity * (Math.sin(this.pulsePhase * 1.3) * 0.3 + 0.8)
+        ctx!.fillStyle = this.color + coreOpacity + ")"
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, currentSize, 0, Math.PI * 2)
+        ctx!.fill()
+      }
+
+      update() {
+        this.baseX += this.velocityX
+        this.baseY += this.velocityY
+
+        this.orbitAngle += this.rotationSpeed
+        const orbitX = Math.cos(this.orbitAngle) * this.orbitRadius
+        const orbitY = Math.sin(this.orbitAngle) * this.orbitRadius
+
+        this.floatOffset += 0.015
+        const floatX = Math.sin(this.floatOffset) * 15
+        const floatY = Math.cos(this.floatOffset * 0.7) * 10
+
+        this.x = this.baseX + orbitX + floatX
+        this.y = this.baseY + orbitY + floatY
+
+        this.pulsePhase += 0.03
+        this.scalePhase += 0.025
+
+        if (this.baseX < -50) this.baseX = window.innerWidth + 50
+        if (this.baseX > window.innerWidth + 50) this.baseX = -50
+        if (this.baseY < -50) this.baseY = window.innerHeight + 50
+        if (this.baseY > window.innerHeight + 50) this.baseY = -50
+      }
+
+      drawConnections(particles: ElegantParticle[]) {
+        particles.forEach((other) => {
+          if (other === this) return
+
+          const dx = this.x - other.x
+          const dy = this.y - other.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
+
+          if (distance < 120) {
+            const baseOpacity = (1 - distance / 120) * 0.15
+            const pulseConnection = Math.sin((this.pulsePhase + other.pulsePhase) * 0.5) * 0.05 + 0.95
+            const connectionOpacity = baseOpacity * pulseConnection
+
+            ctx!.strokeStyle = `rgba(0, 120, 200, ${connectionOpacity})`
+            ctx!.lineWidth = 0.8
+            ctx!.beginPath()
+            ctx!.moveTo(this.x, this.y)
+            ctx!.lineTo(other.x, other.y)
+            ctx!.stroke()
+          }
+        })
+      }
+    }
+
+    class HexagonalGrid {
+      opacity: number
+      pulsePhase: number
+
+      constructor() {
+        this.opacity = 0.03
+        this.pulsePhase = 0
+      }
+
+      draw() {
+        const pulse = Math.sin(this.pulsePhase) * 0.02 + 0.03
+        ctx!.strokeStyle = `rgba(0, 150, 255, ${pulse})`
+        ctx!.lineWidth = 0.5
+
+        const hexSize = 60
+        const hexHeight = hexSize * Math.sqrt(3)
+        const hexWidth = hexSize * 2
+
+        for (let row = 0; row < Math.ceil(window.innerHeight / hexHeight) + 1; row++) {
+          for (let col = 0; col < Math.ceil(window.innerWidth / (hexWidth * 0.75)) + 1; col++) {
+            const x = col * hexWidth * 0.75
+            const y = row * hexHeight + (col % 2) * (hexHeight / 2)
+
+            this.drawHexagon(x, y, hexSize)
+          }
+        }
+      }
+
+      drawHexagon(centerX: number, centerY: number, size: number) {
+        ctx!.beginPath()
+        for (let i = 0; i < 6; i++) {
+          const angle = (i * Math.PI) / 3
+          const x = centerX + size * Math.cos(angle)
+          const y = centerY + size * Math.sin(angle)
+          if (i === 0) {
+            ctx!.moveTo(x, y)
+          } else {
+            ctx!.lineTo(x, y)
+          }
+        }
+        ctx!.closePath()
+        ctx!.stroke()
+      }
+
+      update() {
+        this.pulsePhase += 0.01
+      }
+    }
+
+    class LightStream {
+      x: number
+      y: number
+      length: number
+      angle: number
+      speed: number
+      opacity: number
+      color: string
+      segments: Array<{ x: number; y: number; opacity: number }>
+
+      constructor() {
+        this.x = Math.random() * window.innerWidth
+        this.y = Math.random() * window.innerHeight
+        this.length = Math.random() * 100 + 50
+        this.angle = Math.random() * Math.PI * 2
+        this.speed = Math.random() * 2 + 1
+        this.opacity = Math.random() * 0.3 + 0.1
+        this.color = Math.random() < 0.8 ? "rgba(0, 150, 255, " : "rgba(0, 100, 60, "
+        this.segments = []
+
+        for (let i = 0; i < 20; i++) {
+          this.segments.push({
+            x: this.x,
+            y: this.y,
+            opacity: 0,
+          })
+        }
+      }
+
+      draw() {
+        for (let i = 0; i < this.segments.length; i++) {
+          const segment = this.segments[i]
+          const segmentOpacity = segment.opacity * this.opacity
+
+          if (segmentOpacity > 0.01) {
+            ctx!.fillStyle = this.color + segmentOpacity + ")"
+            ctx!.beginPath()
+            ctx!.arc(segment.x, segment.y, 2, 0, Math.PI * 2)
+            ctx!.fill()
+          }
+        }
+      }
+
+      update() {
+        this.x += Math.cos(this.angle) * this.speed
+        this.y += Math.sin(this.angle) * this.speed
+
+        // Update segments
+        for (let i = this.segments.length - 1; i > 0; i--) {
+          this.segments[i].x = this.segments[i - 1].x
+          this.segments[i].y = this.segments[i - 1].y
+          this.segments[i].opacity = this.segments[i - 1].opacity * 0.9
+        }
+
+        this.segments[0].x = this.x
+        this.segments[0].y = this.y
+        this.segments[0].opacity = 1
+
+        if (this.x < -100 || this.x > window.innerWidth + 100 || this.y < -100 || this.y > window.innerHeight + 100) {
+          this.x = Math.random() * window.innerWidth
+          this.y = Math.random() * window.innerHeight
+          this.angle = Math.random() * Math.PI * 2
+        }
+      }
+    }
+
+    class FloatingOrb {
+      x: number
+      y: number
+      size: number
+      opacity: number
+      velocityX: number
+      velocityY: number
+      pulsePhase: number
+      color: string
+      rotationAngle: number
+
+      constructor() {
+        this.x = Math.random() * window.innerWidth
+        this.y = Math.random() * window.innerHeight
+        this.size = Math.random() * 8 + 4
+        this.opacity = Math.random() * 0.2 + 0.1
+        this.velocityX = (Math.random() - 0.5) * 0.5
+        this.velocityY = (Math.random() - 0.5) * 0.5
+        this.pulsePhase = Math.random() * Math.PI * 2
+        this.rotationAngle = Math.random() * Math.PI * 2
+
+        const orbColors = ["rgba(0, 120, 255, ", "rgba(0, 80, 40, ", "rgba(20, 140, 255, "]
+        this.color = orbColors[Math.floor(Math.random() * orbColors.length)]
+      }
+
+      draw() {
+        const pulse = Math.sin(this.pulsePhase) * 0.3 + 0.7
+        const currentSize = this.size * pulse
+
+        const outerGlow = ctx!.createRadialGradient(this.x, this.y, 0, this.x, this.y, currentSize * 3)
+        outerGlow.addColorStop(0, this.color + this.opacity * 0.8 + ")")
+        outerGlow.addColorStop(0.5, this.color + this.opacity * 0.3 + ")")
+        outerGlow.addColorStop(1, this.color + "0)")
+
+        ctx!.fillStyle = outerGlow
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, currentSize * 3, 0, Math.PI * 2)
+        ctx!.fill()
+
+        ctx!.fillStyle = this.color + this.opacity * 0.6 + ")"
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, currentSize * 0.3, 0, Math.PI * 2)
         ctx!.fill()
       }
 
       update() {
         this.x += this.velocityX
         this.y += this.velocityY
-        if (this.x < 0 || this.x > window.innerWidth) this.velocityX = -this.velocityX
-        if (this.y < 0 || this.y > window.innerHeight) this.velocityY = -this.velocityY
+        this.pulsePhase += 0.02
+        this.rotationAngle += 0.01
+
+        if (this.x < -50) this.x = window.innerWidth + 50
+        if (this.x > window.innerWidth + 50) this.x = -50
+        if (this.y < -50) this.y = window.innerHeight + 50
+        if (this.y > window.innerHeight + 50) this.y = -50
       }
     }
 
-    class BlackHole {
+    class EnergyWave {
       x: number
       y: number
-      size: number
-      rotation: number
+      radius: number
+      maxRadius: number
+      opacity: number
+      speed: number
+      color: string
 
-      constructor(x: number, y: number) {
-        this.x = x
-        this.y = y
-        this.size = 50
-        this.rotation = 0
+      constructor() {
+        this.x = Math.random() * window.innerWidth
+        this.y = Math.random() * window.innerHeight
+        this.radius = 0
+        this.maxRadius = Math.random() * 200 + 100
+        this.opacity = Math.random() * 0.1 + 0.05
+        this.speed = Math.random() * 0.5 + 0.3
+
+        const waveColors = ["rgba(0, 120, 255, ", "rgba(0, 80, 40, "]
+        this.color = waveColors[Math.floor(Math.random() * waveColors.length)]
       }
 
       draw() {
-        ctx!.save()
-        ctx!.translate(this.x, this.y)
-        ctx!.rotate(this.rotation)
-        const gradient = ctx!.createRadialGradient(0, 0, 0, 0, 0, this.size)
-        gradient.addColorStop(0, `rgba(0, 0, 0, 1)`)
-        gradient.addColorStop(0.5, `rgba(20, 20, 40, 0.8)`)
-        gradient.addColorStop(1, `rgba(0, 0, 0, 0)`)
+        if (this.radius > this.maxRadius) return
+
+        const fadeOpacity = this.opacity * (1 - this.radius / this.maxRadius)
+
+        ctx!.strokeStyle = this.color + fadeOpacity + ")"
+        ctx!.lineWidth = 1
         ctx!.beginPath()
-        ctx!.fillStyle = gradient
-        ctx!.arc(0, 0, this.size, 0, Math.PI * 2)
-        ctx!.fill()
-        ctx!.restore()
+        ctx!.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx!.stroke()
       }
 
       update() {
-        this.rotation += 0.01
+        this.radius += this.speed
+
+        if (this.radius > this.maxRadius) {
+          this.radius = 0
+          this.x = Math.random() * window.innerWidth
+          this.y = Math.random() * window.innerHeight
+        }
       }
     }
 
-    const planets = [
-      { x: 100, y: 200, size: 15, color: `rgba(139, 69, 19, 0.7)`, speedX: 0.1, speedY: 0.05, rotation: 0, rotationSpeed: 0.01, hasRings: true, ringColor: `rgba(255, 255, 255, 0.3)` },
-      { x: 500, y: 150, size: 18, color: `rgba(65, 105, 225, 0.7)`, speedX: 0.05, speedY: -0.07, rotation: 0, rotationSpeed: 0.01, hasRings: true, ringColor: `rgba(255, 255, 255, 0.3)` }
-    ]
+    class StarDot {
+      x: number
+      y: number
+      size: number
+      opacity: number
+      twinklePhase: number
+      twinkleSpeed: number
+      velocityX: number
+      velocityY: number
+      maxOpacity: number
 
-    const asteroids = [
-      { x: 150, y: 350, size: 8, speedX: 0.15, speedY: 0.1, rotation: 0, rotationSpeed: 0.02 },
-      { x: 400, y: 100, size: 6, speedX: -0.12, speedY: 0.08, rotation: 0, rotationSpeed: 0.02 },
-      { x: 600, y: 250, size: 10, speedX: 0.09, speedY: -0.05, rotation: 0, rotationSpeed: 0.02 },
-      { x: 800, y: 450, size: 7, speedX: -0.1, speedY: 0.06, rotation: 0, rotationSpeed: 0.02 },
-      { x: 950, y: 600, size: 9, speedX: 0.13, speedY: -0.03, rotation: 0, rotationSpeed: 0.02 }
-    ]
+      constructor() {
+        this.x = Math.random() * window.innerWidth
+        this.y = Math.random() * window.innerHeight
+        this.size = Math.random() * 1.5 + 0.5
+        this.maxOpacity = Math.random() * 0.8 + 0.3
+        this.opacity = this.maxOpacity
+        this.twinklePhase = Math.random() * Math.PI * 2
+        this.twinkleSpeed = Math.random() * 0.02 + 0.01
+        this.velocityX = (Math.random() - 0.5) * 0.3
+        this.velocityY = (Math.random() - 0.5) * 0.3
+      }
 
-    const stars: Star[] = []
-    const blackHoles: BlackHole[] = [
-      new BlackHole(window.innerWidth * 0.2, window.innerHeight * 0.7),
-      new BlackHole(window.innerWidth * 0.6, window.innerHeight * 0.4)
-    ]
+      draw() {
+        const twinkle = Math.sin(this.twinklePhase) * 0.4 + 0.6
+        const currentOpacity = this.maxOpacity * twinkle
 
-    const starCount = isLowEndDevice ? 100 : 300
+        const starGlow = ctx!.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3)
+        starGlow.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity})`)
+        starGlow.addColorStop(0.5, `rgba(255, 255, 255, ${currentOpacity * 0.3})`)
+        starGlow.addColorStop(1, "rgba(255, 255, 255, 0)")
+
+        ctx!.fillStyle = starGlow
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2)
+        ctx!.fill()
+
+        ctx!.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        ctx!.fill()
+
+        if (twinkle > 0.8) {
+          ctx!.strokeStyle = `rgba(255, 255, 255, ${currentOpacity * 0.6})`
+          ctx!.lineWidth = 0.5
+          ctx!.beginPath()
+          ctx!.moveTo(this.x - this.size * 2, this.y)
+          ctx!.lineTo(this.x + this.size * 2, this.y)
+          ctx!.moveTo(this.x, this.y - this.size * 2)
+          ctx!.lineTo(this.x, this.y + this.size * 2)
+          ctx!.stroke()
+        }
+      }
+
+      update() {
+        this.x += this.velocityX
+        this.y += this.velocityY
+        this.twinklePhase += this.twinkleSpeed
+
+        if (this.x < -10) this.x = window.innerWidth + 10
+        if (this.x > window.innerWidth + 10) this.x = -10
+        if (this.y < -10) this.y = window.innerHeight + 10
+        if (this.y > window.innerHeight + 10) this.y = -10
+      }
+    }
+
+    const particles: ElegantParticle[] = []
+    const floatingOrbs: FloatingOrb[] = []
+    const energyWaves: EnergyWave[] = []
+    const stars: StarDot[] = []
+    const hexGrid = new HexagonalGrid()
+    const lightStreams: LightStream[] = []
+
+    const particleCount = isLowEndDevice ? 20 : 35
+    const orbCount = isLowEndDevice ? 3 : 6
+    const waveCount = isLowEndDevice ? 2 : 4
+    const starCount = isLowEndDevice ? 40 : 80
+    const streamCount = isLowEndDevice ? 3 : 6
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new ElegantParticle())
+    }
+
+    for (let i = 0; i < orbCount; i++) {
+      floatingOrbs.push(new FloatingOrb())
+    }
+
+    for (let i = 0; i < waveCount; i++) {
+      energyWaves.push(new EnergyWave())
+    }
+
     for (let i = 0; i < starCount; i++) {
-      stars.push(new Star())
+      stars.push(new StarDot())
+    }
+
+    for (let i = 0; i < streamCount; i++) {
+      lightStreams.push(new LightStream())
     }
 
     const initScene = () => {
@@ -190,98 +534,38 @@ const SpaceBackground = () => {
     }
 
     const renderScene = () => {
-      ctx!.fillStyle = theme === "dark" ? "rgba(10, 10, 20, 1)" : "rgba(20, 20, 40, 1)"
-      ctx!.fillRect(0, 0, window.innerWidth, window.innerHeight)
+      initBackground()
 
-      // Update and draw black holes
-      blackHoles.forEach((blackHole) => {
-        blackHole.update()
-        blackHole.draw()
+      hexGrid.update()
+      hexGrid.draw()
+
+      lightStreams.forEach((stream) => {
+        stream.update()
+        stream.draw()
       })
 
-      // Update and draw planets
-      planets.forEach((planet) => {
-        planet.x += planet.speedX
-        planet.y += planet.speedY
-        planet.rotation += planet.rotationSpeed
-
-        // Draw planet
-        ctx.save()
-        ctx.translate(planet.x, planet.y)
-        ctx.rotate(planet.rotation)
-
-        // Planet body
-        const planetGradient = ctx.createRadialGradient(-planet.size * 0.3, -planet.size * 0.3, 0, 0, 0, planet.size)
-        planetGradient.addColorStop(0, planet.color)
-        planetGradient.addColorStop(1, planet.color.replace(/[\d.]+\)$/, "0.3)"))
-
-        ctx.fillStyle = planetGradient
-        ctx.beginPath()
-        ctx.arc(0, 0, planet.size, 0, Math.PI * 2)
-        ctx.fill()
-
-        // Planet rings
-        if (planet.hasRings && planet.ringColor) {
-          ctx.strokeStyle = planet.ringColor
-          ctx.lineWidth = 2
-          ctx.setLineDash([2, 4])
-
-          for (let i = 1; i <= 3; i++) {
-            ctx.beginPath()
-            ctx.ellipse(0, 0, planet.size * (1.3 + i * 0.2), planet.size * (0.3 + i * 0.1), 0, 0, Math.PI * 2)
-            ctx.stroke()
-          }
-        }
-
-        ctx.restore()
-
-        // Keep on screen
-        if (planet.x < -planet.size) planet.x = window.innerWidth + planet.size
-        if (planet.x > window.innerWidth + planet.size) planet.x = -planet.size
-        if (planet.y < -planet.size) planet.y = window.innerHeight + planet.size
-        if (planet.y > window.innerHeight + planet.size) planet.y = -planet.size
+      energyWaves.forEach((wave) => {
+        wave.update()
+        wave.draw()
       })
 
-      // Update and draw asteroids
-      asteroids.forEach((asteroid) => {
-        asteroid.x += asteroid.speedX
-        asteroid.y += asteroid.speedY
-        asteroid.rotation += asteroid.rotationSpeed
-
-        ctx.save()
-        ctx.translate(asteroid.x, asteroid.y)
-        ctx.rotate(asteroid.rotation)
-
-        // Draw irregular asteroid shape
-        ctx.fillStyle = theme === "dark" ? "rgba(150, 150, 150, 0.8)" : "rgba(100, 100, 100, 0.6)"
-        ctx.beginPath()
-
-        const points = 6
-        for (let i = 0; i < points; i++) {
-          const angle = (i * Math.PI * 2) / points
-          const radius = asteroid.size * (0.7 + Math.random() * 0.6)
-          const x = radius * Math.cos(angle)
-          const y = radius * Math.sin(angle)
-
-          if (i === 0) ctx.moveTo(x, y)
-          else ctx.lineTo(x, y)
-        }
-
-        ctx.closePath()
-        ctx.fill()
-        ctx.restore()
-
-        // Keep on screen
-        if (asteroid.x < -asteroid.size) asteroid.x = window.innerWidth + asteroid.size
-        if (asteroid.x > window.innerWidth + asteroid.size) asteroid.x = -asteroid.size
-        if (asteroid.y < -asteroid.size) asteroid.y = window.innerHeight + asteroid.size
-        if (asteroid.y > window.innerHeight + asteroid.size) asteroid.y = -asteroid.size
+      floatingOrbs.forEach((orb) => {
+        orb.update()
+        orb.draw()
       })
 
-      // Update and draw stars
       stars.forEach((star) => {
         star.update()
         star.draw()
+      })
+
+      particles.forEach((particle) => {
+        particle.drawConnections(particles)
+      })
+
+      particles.forEach((particle) => {
+        particle.update()
+        particle.draw()
       })
 
       requestAnimationFrame(renderScene)
@@ -302,12 +586,10 @@ const SpaceBackground = () => {
       className="absolute inset-0 w-full h-full z-0"
       style={{
         background:
-          theme === "dark"
-            ? "linear-gradient(to bottom, #0a0a14, #141428)"
-            : "linear-gradient(to bottom, #141428, #1a1a32)",
+          "radial-gradient(ellipse at center, rgba(8, 20, 45, 1) 0%, rgba(0, 0, 0, 1) 30%, rgba(0, 15, 8, 0.2) 60%, rgba(0, 0, 0, 1) 100%)",
       }}
     />
   )
 }
 
-export default SpaceBackground
+export default PremiumBackground
