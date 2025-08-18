@@ -1,15 +1,22 @@
-// components/client-layout.tsx
-"use client"
+"use client";
 
-import Preloader from "@/components/preloader"
-import GlobalBackground from "@/components/global-background"
+import { memo } from "react";
+import dynamic from "next/dynamic";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+// Lazy-load Preloader
+const DynamicPreloader = dynamic(() => import("./preloader"), { ssr: false });
+
+interface ClientLayoutProps {
+  children: React.ReactNode;
+}
+
+const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
   return (
     <>
-      <Preloader />
-      <GlobalBackground />
+      <DynamicPreloader />
       {children}
     </>
-  )
-}
+  );
+};
+
+export default memo(ClientLayout);

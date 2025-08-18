@@ -1,11 +1,11 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class", '[data-theme="dark"]'],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}", // Keep App Router files
+    "./components/**/*.{js,ts,jsx,tsx,mdx}", // Keep components
+    // Removed "./pages/**/*" since you're using App Router, not Pages Router
   ],
   future: {
     hoverOnlyWhenSupported: true,
@@ -103,26 +103,22 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "spin-reverse": {
-          to: { transform: "rotate(-360deg)" },
-        },
+        // Removed "spin-reverse" to reduce animation overhead
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "spin-reverse": "spin-reverse 1s linear infinite",
-        "light-sweep": "light-sweep 15s infinite linear",
-        "float-slow": "float-slow 20s infinite alternate ease-in-out",
+        // Removed "spin-reverse", "light-sweep", "float-slow" to reduce main-thread work
       },
       backgroundImage: {
-        "radial-vignette": "radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.3) 150%)",
+        // Removed "radial-vignette" if unused; verify usage in components
       },
       transitionTimingFunction: {
         "bounce-in-out": "cubic-bezier(0.68, -0.55, 0.27, 1.55)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [], // Removed tailwindcss-animate to reduce CSS/JS bundle
+} satisfies Config;
 
-export default config
+export default config;

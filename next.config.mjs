@@ -1,24 +1,34 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
   eslint: {
     ignoreDuringBuilds: true,
   },
-
   typescript: {
     ignoreBuildErrors: true,
   },
-
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"], // Enable next-gen formats
+    deviceSizes: [640, 750, 828, 1080, 1200], // Common device widths
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], // For thumbnails
+    domains: [], // Add external domains if used (e.g., CDN)
   },
-
-  // ❌ DO NOT ADD: output: 'export'
-  // output: 'export' sirf static websites ke liye hota hai
-
   experimental: {
     typedRoutes: true,
+    optimizeCss: true, // Minify Tailwind CSS
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate", // Improve back/forward cache
+          },
+        ],
+      },
+    ];
   },
 };
 

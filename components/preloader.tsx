@@ -1,36 +1,43 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
-const Preloader = () => {
-  const [isLoading, setIsLoading] = useState(true)
+const Preloader: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Shorter preloader time for better performance
+    // Fade out preloader after 1s to avoid blocking LCP
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 800)
+      setIsVisible(false);
+    }, 1000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
-  if (!isLoading) return null
+  // Only render on client to avoid hydration mismatches
+  if (typeof window === "undefined") return null;
 
   return (
     <div
       className={cn(
-        "fixed inset-0 bg-gray-950 dark:bg-gray-950 flex justify-center items-center z-[9999]",
-        "transition-opacity duration-300",
-        !isLoading && "opacity-0 invisible",
+        "fixed inset-0 z-50 bg-black flex justify-center items-center transition-opacity duration-300",
+        isVisible ? "opacity-100" : "opacity-0 pointer-events-none",
       )}
+      suppressHydrationWarning // Handle browser extension attributes like bis_skin_checked
     >
       <div className="relative w-16 h-16">
-        <div className="absolute inset-0 border-4 border-green-200/20 border-t-green-500 rounded-full animate-spin"></div>
-        <div className="absolute inset-2 border-4 border-blue-200/20 border-t-blue-500 rounded-full animate-spin-reverse"></div>
+        <div
+          className="absolute inset-0 border-4 border-green-200/20 border-t-green-500 rounded-full animate-spin will-change-transform"
+          style={{ animationDuration: "1.2s" }}
+        />
+        <div
+          className="absolute inset-2 border-4 border-blue-200/20 border-t-blue-500 rounded-full animate-spin will-change-transform"
+          style={{ animationDuration: "1s", animationDirection: "reverse" }}
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Preloader
+export default Preloader;
