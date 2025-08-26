@@ -1,6 +1,6 @@
 "use client";
 
-import { Server, Database, Network, Cloud } from "lucide-react"
+import { Server, Database } from "lucide-react";
 import { useEffect, useRef, useState, memo } from "react";
 import {
   FileText,
@@ -40,7 +40,7 @@ const SkillItem = memo(({ title, percentage, delay = 0 }: SkillItemProps) => {
             observer.disconnect();
           }
         },
-        { threshold: 0.15 }
+        { threshold: 0.3, rootMargin: "0px 0px -50px 0px" }
       );
       observer.observe(progressRef.current);
     }
@@ -121,9 +121,10 @@ const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="py-16 md:py-28 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 relative overflow-hidden transition-colors duration-500"
+      className="py-16 md:py-28 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 relative md:overflow-hidden transition-colors duration-500"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent" />
+      {/* Responsive gradient circle */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
@@ -134,7 +135,7 @@ const SkillsSection = () => {
             </span>
           </div>
 
-          {/* Heading with green underline */}
+          {/* Heading */}
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-24 after:h-1 after:bg-green-500 after:mx-auto">
             My Skills
           </h2>
@@ -157,7 +158,7 @@ const SkillsSection = () => {
                     key={skillIndex}
                     title={skill.title}
                     percentage={skill.percentage}
-                    delay={skillIndex * 120 + index * 80} // ⚡ staggered animation
+                    delay={skillIndex * 120 + index * 80}
                   />
                 ))}
               </div>
