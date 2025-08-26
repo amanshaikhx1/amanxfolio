@@ -16,7 +16,7 @@ import {
   Eye,
   PieChart,
   MonitorSmartphone,
-  Database // Re-added Database icon
+  Database
 } from "lucide-react"
 
 interface SkillItemProps {
@@ -92,37 +92,25 @@ const skillCategories = [
 
 const SkillsSection = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [visibleSkills, setVisibleSkills] = useState<string[]>([])
+  const [isSectionVisible, setIsSectionVisible] = useState(false)
 
   useEffect(() => {
-    let debounceTimer: NodeJS.Timeout
     const observer = new IntersectionObserver(
-      (entries) => {
-        clearTimeout(debounceTimer)
-        debounceTimer = setTimeout(() => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const skillId = entry.target.getAttribute("data-skill-id")
-              if (skillId && !visibleSkills.includes(skillId)) {
-                setVisibleSkills((prev) => [...prev, skillId])
-              }
-            }
-          })
-        }, 100)
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsSectionVisible(true)
+          observer.disconnect()
+        }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     )
 
     if (containerRef.current) {
-      const skillContainers = containerRef.current.querySelectorAll("[data-skill-id]")
-      skillContainers.forEach((container) => observer.observe(container))
+      observer.observe(containerRef.current)
     }
 
-    return () => {
-      clearTimeout(debounceTimer)
-      observer.disconnect()
-    }
-  }, [visibleSkills])
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <section
@@ -159,13 +147,12 @@ const SkillsSection = () => {
                 </h3>
 
                 {category.skills.map((skill, skillIndex) => (
-                  <div key={skillIndex} data-skill-id={`${index}-${skillIndex}`}>
-                    <SkillItem
-                      title={skill.title}
-                      percentage={skill.percentage}
-                      isVisible={visibleSkills.includes(`${index}-${skillIndex}`)}
-                    />
-                  </div>
+                  <SkillItem
+                    key={skillIndex}
+                    title={skill.title}
+                    percentage={skill.percentage}
+                    isVisible={isSectionVisible}
+                  />
                 ))}
               </div>
             ))}
