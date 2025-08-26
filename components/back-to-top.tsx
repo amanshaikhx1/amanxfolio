@@ -1,45 +1,46 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { ArrowUp } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState, useEffect, useCallback } from "react";
+import { ArrowUp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const SCROLL_THRESHOLD = 300
-const DEBOUNCE_DELAY = 100
+const SCROLL_THRESHOLD = 300;
 
 const BackToTop = () => {
-  const [isVisible, setIsVisible] = useState(false)
-
-  // Debounce helper
-  const debounce = (func: () => void, delay: number) => {
-    let timeout: NodeJS.Timeout
-    return () => {
-      clearTimeout(timeout)
-      timeout = setTimeout(func, delay)
-    }
-  }
+  const [isVisible, setIsVisible] = useState(false);
 
   const checkScrollPosition = useCallback(() => {
-    setIsVisible(window.scrollY > SCROLL_THRESHOLD)
-  }, [])
+    if (typeof window !== "undefined") {
+      setIsVisible(window.scrollY > SCROLL_THRESHOLD);
+    }
+  }, []);
 
   useEffect(() => {
-    const handleScroll = debounce(checkScrollPosition, DEBOUNCE_DELAY)
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    let ticking = false;
 
-    // Check initial position
-    checkScrollPosition()
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          checkScrollPosition();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    checkScrollPosition(); // Initial check
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [checkScrollPosition])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [checkScrollPosition]);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }
+  }, []);
 
   return (
     <button
@@ -57,7 +58,7 @@ const BackToTop = () => {
     >
       <ArrowUp className="w-5 h-5 md:w-6 md:h-6" />
     </button>
-  )
-}
+  );
+};
 
-export default BackToTop
+export default BackToTop;

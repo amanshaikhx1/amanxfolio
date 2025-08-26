@@ -1,58 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, memo } from "react"
 import { Server, Database, Network, Cloud } from "lucide-react"
-
-interface SkillItemProps {
-  title: string
-  percentage: number
-  delay?: number
-}
-
-const SkillItem = memo(({ title, percentage, delay = 0 }: SkillItemProps) => {
-  const progressRef = useRef<HTMLSpanElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && progressRef.current) {
-          const el = progressRef.current
-          setTimeout(() => {
-            el.style.width = `${percentage}%`
-          }, delay)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [percentage, delay])
-
-  return (
-    <div ref={containerRef} className="mb-6">
-      <div className="flex justify-between mb-2">
-        <h4 className="text-sm font-medium text-gray-800 dark:text-gray-300">{title}</h4>
-        <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
-          {percentage}%
-        </span>
-      </div>
-      <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
-        <span
-          ref={progressRef}
-          className="block h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full w-0 transition-all duration-1000 ease-out"
-        ></span>
-      </div>
-    </div>
-  )
-})
-SkillItem.displayName = "SkillItem"
-
+import { useEffect, useRef, useState, memo } from "react";
 import {
   FileText,
   Users,
@@ -67,8 +16,61 @@ import {
   Filter,
   Eye,
   PieChart,
-  MonitorSmartphone
-} from "lucide-react"
+  MonitorSmartphone,
+} from "lucide-react";
+
+interface SkillItemProps {
+  title: string;
+  percentage: number;
+  delay?: number;
+}
+
+const SkillItem = memo(({ title, percentage, delay = 0 }: SkillItemProps) => {
+  const progressRef = useRef<HTMLSpanElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let observer: IntersectionObserver;
+
+    if (progressRef.current) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => setVisible(true), delay);
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.15 }
+      );
+      observer.observe(progressRef.current);
+    }
+
+    return () => {
+      if (observer) observer.disconnect();
+    };
+  }, [delay]);
+
+  return (
+    <div className="mb-6">
+      <div className="flex justify-between mb-2">
+        <h4 className="text-sm font-medium text-gray-800 dark:text-gray-300">
+          {title}
+        </h4>
+        <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
+          {percentage}%
+        </span>
+      </div>
+      <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
+        <span
+          ref={progressRef}
+          className="block h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full transition-all duration-1000 ease-out"
+          style={{ width: visible ? `${percentage}%` : "0%" }}
+        ></span>
+      </div>
+    </div>
+  );
+});
+SkillItem.displayName = "SkillItem";
 
 const skillCategories = [
   {
@@ -113,7 +115,7 @@ const skillCategories = [
       { title: "Data-driven Decision Support", percentage: 87 },
     ],
   },
-]
+];
 
 const SkillsSection = () => {
   return (
@@ -155,7 +157,7 @@ const SkillsSection = () => {
                     key={skillIndex}
                     title={skill.title}
                     percentage={skill.percentage}
-                    delay={skillIndex * 200 + index * 100}
+                    delay={skillIndex * 120 + index * 80} // ⚡ staggered animation
                   />
                 ))}
               </div>
@@ -164,7 +166,7 @@ const SkillsSection = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default memo(SkillsSection)
+export default memo(SkillsSection);
