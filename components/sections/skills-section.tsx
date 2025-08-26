@@ -1,58 +1,6 @@
 "use client"
 
-import { useEffect, useRef, memo } from "react"
-import { Server, Database, Network, Cloud } from "lucide-react"
-
-interface SkillItemProps {
-  title: string
-  percentage: number
-  delay?: number
-}
-
-const SkillItem = memo(({ title, percentage, delay = 0 }: SkillItemProps) => {
-  const progressRef = useRef<HTMLSpanElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && progressRef.current) {
-          const el = progressRef.current
-          setTimeout(() => {
-            el.style.width = `${percentage}%`
-          }, delay)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [percentage, delay])
-
-  return (
-    <div ref={containerRef} className="mb-6">
-      <div className="flex justify-between mb-2">
-        <h4 className="text-sm font-medium text-gray-800 dark:text-gray-300">{title}</h4>
-        <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
-          {percentage}%
-        </span>
-      </div>
-      <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
-        <span
-          ref={progressRef}
-          className="block h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full w-0 transition-all duration-1000 ease-out"
-        ></span>
-      </div>
-    </div>
-  )
-})
-SkillItem.displayName = "SkillItem"
-
+import { useEffect, useRef, useState, memo } from "react"
 import {
   FileText,
   Users,
@@ -67,8 +15,35 @@ import {
   Filter,
   Eye,
   PieChart,
-  MonitorSmartphone
+  MonitorSmartphone,
+  Database // Re-added Database icon
 } from "lucide-react"
+
+interface SkillItemProps {
+  title: string
+  percentage: number
+  isVisible: boolean
+}
+
+const SkillItem = memo(({ title, percentage, isVisible }: SkillItemProps) => {
+  return (
+    <div className="mb-6">
+      <div className="flex justify-between mb-2">
+        <h4 className="text-sm font-medium text-gray-800 dark:text-gray-300">{title}</h4>
+        <span className="text-sm font-semibold px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
+          {percentage}%
+        </span>
+      </div>
+      <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
+        <span
+          className="block h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
+          style={{ width: isVisible ? `${percentage}%` : "0%" }}
+        ></span>
+      </div>
+    </div>
+  )
+})
+SkillItem.displayName = "SkillItem"
 
 const skillCategories = [
   {
@@ -116,29 +91,62 @@ const skillCategories = [
 ]
 
 const SkillsSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [visibleSkills, setVisibleSkills] = useState<string[]>([])
+
+  useEffect(() => {
+    let debounceTimer: NodeJS.Timeout
+    const observer = new IntersectionObserver(
+      (entries) => {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const skillId = entry.target.getAttribute("data-skill-id")
+              if (skillId && !visibleSkills.includes(skillId)) {
+                setVisibleSkills((prev) => [...prev, skillId])
+              }
+            }
+          })
+        }, 100)
+      },
+      { threshold: 0.2 }
+    )
+
+    if (containerRef.current) {
+      const skillContainers = containerRef.current.querySelectorAll("[data-skill-id]")
+      skillContainers.forEach((container) => observer.observe(container))
+    }
+
+    return () => {
+      clearTimeout(debounceTimer)
+      observer.disconnect()
+    }
+  }, [visibleSkills])
+
   return (
     <section
       id="skills"
       className="py-16 md:py-28 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 relative overflow-hidden transition-colors duration-500"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          {/* Badge */}
           <div className="mb-4">
             <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
               My Speciality
             </span>
           </div>
-
-          {/* Heading with green underline */}
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-24 after:h-1 after:bg-green-500 after:mx-auto">
             My Skills
           </h2>
         </div>
 
-        <div className="p-6 md:p-10 rounded-xl bg-white dark:bg-[#030712] backdrop-blur-sm border border-gray-200 dark:border-white/10 shadow-xl transition-colors duration-300">
+        <div 
+          ref={containerRef}
+          className="p-6 md:p-10 rounded-xl bg-white dark:bg-[#030712] border border-gray-200 dark:border-white/10 shadow-xl transition-colors duration-300"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {skillCategories.map((category, index) => (
               <div key={index}>
@@ -151,12 +159,13 @@ const SkillsSection = () => {
                 </h3>
 
                 {category.skills.map((skill, skillIndex) => (
-                  <SkillItem
-                    key={skillIndex}
-                    title={skill.title}
-                    percentage={skill.percentage}
-                    delay={skillIndex * 200 + index * 100}
-                  />
+                  <div key={skillIndex} data-skill-id={`${index}-${skillIndex}`}>
+                    <SkillItem
+                      title={skill.title}
+                      percentage={skill.percentage}
+                      isVisible={visibleSkills.includes(`${index}-${skillIndex}`)}
+                    />
+                  </div>
                 ))}
               </div>
             ))}

@@ -198,7 +198,7 @@ const Header = () => {
                 <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></div>
               </div>
               <div className="flex items-center space-x-1.5">
-                <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div>
+                {/* <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div> */}
                 <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors duration-300">
                   Business Data Analyst
                 </span>
