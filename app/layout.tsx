@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://amanxfolio.in"),
   title: "Aman Shaikh - Personal Portfolio",
   description:
-    "Aman Shaikh - Software Engineer specializing in Backend Development, System Design, and Cloud Computing",
+    "Aman Shaikh - Business Analyst, Business Data Analyst",
   generator: "v0.dev",
 };
 

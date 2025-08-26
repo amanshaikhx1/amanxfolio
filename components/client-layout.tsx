@@ -3,7 +3,6 @@
 import { memo } from "react";
 import dynamic from "next/dynamic";
 
-// Lazy-load Preloader
 const DynamicPreloader = dynamic(() => import("./preloader"), { ssr: false });
 
 interface ClientLayoutProps {

@@ -1,13 +1,13 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { Sun, Moon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useRouter, usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,8 +15,10 @@ const Header = () => {
   const [activeSection, setActiveSection] = useState("home");
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -98,6 +100,19 @@ const Header = () => {
     document.body.classList.toggle("overflow-hidden", isMobileMenuOpen);
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.clientHeight);
+      }
+    };
+
+    updateHeaderHeight();
+    window.addEventListener("resize", updateHeaderHeight);
+
+    return () => window.removeEventListener("resize", updateHeaderHeight);
+  }, [isScrolled]);
+
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
@@ -148,6 +163,7 @@ const Header = () => {
 
   return (
     <header
+      ref={headerRef}
       className={cn(
         "sticky top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-md border-b",
         "bg-black/90 border-white/10",
@@ -160,11 +176,10 @@ const Header = () => {
             <div className="relative w-14 h-14 flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-xl blur-sm opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
               <div className="relative w-full h-full bg-gradient-to-br from-slate-900 to-black rounded-xl border border-slate-600/50 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-600/10 animate-pulse"></div>
-                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-bounce"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-600/10"></div>
+                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></div>
                 <div
-                  className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.5s" }}
+                  className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
                 ></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
@@ -180,7 +195,7 @@ const Header = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-200 bg-clip-text text-transparent group-hover:from-cyan-400 group-hover:via-blue-400 group-hover:to-purple-400 transition-all duration-300">
                   AmanxFolio
                 </h1>
-                <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full"></div>
               </div>
               <div className="flex items-center space-x-1.5">
                 <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div>
@@ -218,72 +233,6 @@ const Header = () => {
             </div>
           </div>
 
-          {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-50 bg-black md:hidden">
-              <div className="flex flex-col h-full bg-black">
-                <div className="flex items-center justify-between p-6 border-b border-white/10 bg-black">
-                  <div className="group cursor-pointer flex items-center space-x-3" onClick={closeMobileMenu}>
-                    <div className="relative w-14 h-14 flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-xl blur-sm opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-                      <div className="relative w-full h-full bg-gradient-to-br from-slate-900 to-black rounded-xl border border-slate-600/50 overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-600/10 animate-pulse"></div>
-                        <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-bounce"></div>
-                        <div
-                          className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.5s" }}
-                        ></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-3xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
-                            A
-                          </span>
-                        </div>
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/60 rounded-tl-lg opacity-40"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-purple-500/60 rounded-br-lg opacity-40"></div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col space-y-0.5">
-                      <div className="flex items-center space-x-1.5">
-                        <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-cyan-200 to-blue-200 bg-clip-text text-transparent group-hover:from-cyan-400 group-hover:via-blue-400 group-hover:to-purple-400 transition-all duration-300">
-                          AmanxFolio
-                        </h1>
-                        <div className="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
-                      </div>
-                      <div className="flex items-center space-x-1.5">
-                        <div className="w-6 h-0.5 bg-gradient-to-r from-cyan-500 to-transparent rounded-full"></div>
-                        <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors duration-300">
-                          Business Data Analyst
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={closeMobileMenu}
-                    className="text-white hover:text-gray-300 transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X className="h-6 w-6" />
-                  </button>
-                </div>
-                <nav className="flex flex-col px-8 pt-8 space-y-6 bg-black">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        "text-white text-xl font-normal tracking-wide transition-colors duration-200 uppercase",
-                        "hover:text-green-500 pb-2 border-b border-gray-600",
-                        isActiveLink(link) && "text-green-500"
-                      )}
-                      onClick={(e) => handleNavClick(e, link)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </div>
-          )}
-
           <div className="flex items-center gap-4 z-60">
             <Button
               variant="ghost"
@@ -300,33 +249,83 @@ const Header = () => {
                 <Sun className="h-5 w-5 text-yellow-500" />
               )}
             </Button>
-            <button
-              className="md:hidden relative flex flex-col justify-center items-center w-10 h-10 text-white transition-transform duration-300"
-              onClick={toggleMobileMenu}
-              aria-label="Toggle menu"
-            >
-              <div
-                className={cn(
-                  "w-6 h-1 bg-white rounded-full transition-all duration-300 transform-gpu",
-                  isMobileMenuOpen ? "rotate-45 translate-y-2" : "-translate-y-1"
-                )}
-              ></div>
-              <div
-                className={cn(
-                  "w-6 h-1 bg-white rounded-full transition-all duration-300 transform-gpu",
-                  isMobileMenuOpen ? "opacity-0" : "opacity-100"
-                )}
-              ></div>
-              <div
-                className={cn(
-                  "w-6 h-1 bg-white rounded-full transition-all duration-300 transform-gpu",
-                  isMobileMenuOpen ? "-rotate-45 -translate-y-2" : "translate-y-1"
-                )}
-              ></div>
-            </button>
+            <label className="hamburger cursor-pointer md:hidden">
+              <input
+                type="checkbox"
+                checked={isMobileMenuOpen}
+                onChange={toggleMobileMenu}
+              />
+              <svg viewBox="0 0 32 32">
+                <path className="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" />
+                <path className="line" d="M7 16 27 16" />
+              </svg>
+            </label>
           </div>
         </nav>
       </div>
+      {isMobileMenuOpen && (
+        <div
+          className="fixed left-0 w-full bg-black overflow-y-auto z-40 md:hidden"
+          style={{ top: `${headerHeight}px`, height: `calc(100vh - ${headerHeight}px)` }}
+        >
+          <nav className="flex flex-col px-8 pt-8 space-y-6 bg-black">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "text-white text-xl font-normal tracking-wide transition-colors duration-200 uppercase",
+                  "hover:text-green-500 pb-2 border-b border-gray-600",
+                  isActiveLink(link) && "text-green-500"
+                )}
+                onClick={(e) => handleNavClick(e, link)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+      <style jsx global>{`
+        .hamburger {
+          cursor: pointer;
+        }
+
+        .hamburger input {
+          display: none;
+        }
+
+        .hamburger svg {
+          /* The size of the SVG defines the overall size */
+          height: 3em;
+          /* Define the transition for transforming the SVG */
+          transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .line {
+          fill: none;
+          stroke: white;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: 3;
+          /* Define the transition for transforming the Stroke */
+          transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                      stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .line-top-bottom {
+          stroke-dasharray: 12 63;
+        }
+
+        .hamburger input:checked + svg {
+          transform: rotate(-45deg);
+        }
+
+        .hamburger input:checked + svg .line-top-bottom {
+          stroke-dasharray: 20 300;
+          stroke-dashoffset: -32.42;
+        }
+      `}</style>
     </header>
   );
 };

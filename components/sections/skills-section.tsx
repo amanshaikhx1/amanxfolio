@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, memo } from "react"
 import { Server, Database, Network, Cloud } from "lucide-react"
-import SectionTitle from "@/components/section-title"
 
 interface SkillItemProps {
   title: string

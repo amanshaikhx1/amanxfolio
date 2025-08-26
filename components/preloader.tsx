@@ -1,43 +1,116 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 
 const Preloader: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Fade out preloader after 1s to avoid blocking LCP
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 1000);
-
+    }, 1200); // 1.2s ke baad fade out
     return () => clearTimeout(timer);
   }, []);
 
-  // Only render on client to avoid hydration mismatches
   if (typeof window === "undefined") return null;
 
   return (
-    <div
-      className={cn(
-        "fixed inset-0 z-50 bg-black flex justify-center items-center transition-opacity duration-300",
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none",
-      )}
-      suppressHydrationWarning // Handle browser extension attributes like bis_skin_checked
-    >
-      <div className="relative w-16 h-16">
-        <div
-          className="absolute inset-0 border-4 border-green-200/20 border-t-green-500 rounded-full animate-spin will-change-transform"
-          style={{ animationDuration: "1.2s" }}
-        />
-        <div
-          className="absolute inset-2 border-4 border-blue-200/20 border-t-blue-500 rounded-full animate-spin will-change-transform"
-          style={{ animationDuration: "1s", animationDirection: "reverse" }}
-        />
-      </div>
-    </div>
+    <Overlay className={isVisible ? "visible" : "hidden"}>
+      <div className="loader" />
+    </Overlay>
   );
 };
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease;
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .loader {
+    position: relative;
+    width: 2.5em;
+    height: 2.5em;
+    transform: rotate(165deg);
+  }
+
+  .loader:before,
+  .loader:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+  }
+
+  .loader:before {
+    animation: before8 2s infinite;
+  }
+
+  .loader:after {
+    animation: after6 2s infinite;
+  }
+
+  @keyframes before8 {
+    0% {
+      width: 0.5em;
+      box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75),
+        -1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+    35% {
+      width: 2.5em;
+      box-shadow: 0 -0.5em rgba(225, 20, 98, 0.75),
+        0 0.5em rgba(111, 202, 220, 0.75);
+    }
+    70% {
+      width: 0.5em;
+      box-shadow: -1em -0.5em rgba(225, 20, 98, 0.75),
+        1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+    100% {
+      box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75),
+        -1em 0.5em rgba(111, 202, 220, 0.75);
+    }
+  }
+
+  @keyframes after6 {
+    0% {
+      height: 0.5em;
+      box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75),
+        -0.5em -1em rgba(233, 169, 32, 0.75);
+    }
+    35% {
+      height: 2.5em;
+      box-shadow: 0.5em 0 rgba(61, 184, 143, 0.75),
+        -0.5em 0 rgba(233, 169, 32, 0.75);
+    }
+    70% {
+      height: 0.5em;
+      box-shadow: 0.5em -1em rgba(61, 184, 143, 0.75),
+        -0.5em 1em rgba(233, 169, 32, 0.75);
+    }
+    100% {
+      box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75),
+        -0.5em -1em rgba(233, 169, 32, 0.75);
+    }
+  }
+`;
 
 export default Preloader;
