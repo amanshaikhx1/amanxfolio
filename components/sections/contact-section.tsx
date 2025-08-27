@@ -71,50 +71,41 @@ const ContactSection = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validateForm()) return
+  const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+  if (!validateForm()) return
 
-    setIsSubmitting(true)
-    setSubmitStatus(null)
+  setIsSubmitting(true)
+  setSubmitStatus(null)
 
-    try {
-      const templateParams = {
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-      }
+  try {
+    const recipientEmail = "amanshaikhx01@gmail.com" // apna Gmail yahan
 
-      await emailjs.send(
-        "service_kdkvhwp",     // Replace with your EmailJS service ID
-        "template_g480zja",    // Replace with your EmailJS template ID
-        templateParams,
-        "zdgMEBQYq8larefXL"    // Replace with your public key
-      )
+    // Gmail compose URL
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      recipientEmail
+    )}&su=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )}`
 
-      setSubmitStatus({
-        type: "success",
-        message: "Your message has been sent successfully!",
-      })
+    // Open Gmail in new tab
+    window.open(gmailLink, "_blank")
 
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      })
-
-      setTimeout(() => setSubmitStatus(null), 5000)
-    } catch (error) {
-      setSubmitStatus({
-        type: "error",
-        message: "There was an error sending your message. Please try again.",
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    setSubmitStatus({
+      type: "success",
+      message:
+        "Gmail compose window should open now. Please send your message from there.",
+    })
+  } catch (error) {
+    setSubmitStatus({
+      type: "error",
+      message: "There was an error. Please try again.",
+    })
+  } finally {
+    setIsSubmitting(false)
   }
+}
+
 
   const socialLinks = [
     // {
