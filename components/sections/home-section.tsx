@@ -47,9 +47,9 @@ const HomeSection = () => {
           hueShift={30}          // 👈 rang shift (0–360)
           noiseIntensity={0}     // 👈 clean background (0 = no noise)
           scanlineIntensity={0}  // 👈 disable scanlines
-          speed={1}            // 👈 animation speed
+          speed={0.5}            // 👈 animation speed
           scanlineFrequency={0}  // 👈 disable scanline effect
-          warpAmount={5}      // 👈 thoda warp distortion
+          warpAmount={0}      // 👈 thoda warp distortion
           resolutionScale={1}    // 👈 quality control
         />
       </div>
