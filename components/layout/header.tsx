@@ -107,7 +107,34 @@ const Header = () => {
       observer.disconnect();
       clearTimeout(timer);
     };
-  }, [activeSection]);
+  }, [activeSection, pathname]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        const targetElement = document.getElementById(hash);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: "smooth",
+          });
+          setActiveSection(hash);
+        } else {
+          console.warn(`Element with id ${hash} not found`);
+        }
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle("overflow-hidden", isMobileMenuOpen);
@@ -148,7 +175,7 @@ const Header = () => {
       router.push(link.href);
     } else {
       if (pathname.startsWith("/blog")) {
-        router.push(link.href);
+        router.push(`/${link.href}`);
       } else {
         const targetId = link.href.substring(1);
         const targetElement = document.getElementById(targetId);
@@ -169,10 +196,9 @@ const Header = () => {
     if (link.type === "navigate") {
       return pathname === link.href || pathname.startsWith(link.href);
     }
-    if (pathname === "/") {
-      return activeSection === link.href.substring(1);
-    }
-    return false;
+    const currentHash = typeof window !== "undefined" ? window.location.hash : "";
+    return (pathname === "/" || pathname === "/#" + link.href.substring(1)) && 
+           (activeSection === link.href.substring(1) || currentHash === link.href);
   };
 
   return (

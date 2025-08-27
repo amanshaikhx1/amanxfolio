@@ -3,6 +3,19 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { useTheme } from "next-themes"
 
+class SeededRandom {
+  private seed: number
+
+  constructor(seed: number) {
+    this.seed = seed
+  }
+
+  next(): number {
+    this.seed = (this.seed * 9301 + 49297) % 233280
+    return this.seed / 233280
+  }
+}
+
 const PremiumBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationFrameRef = useRef<number>(0)
@@ -10,6 +23,7 @@ const PremiumBackground = () => {
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const backgroundCtxRef = useRef<CanvasRenderingContext2D | null>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
+  const seededRandomRef = useRef<SeededRandom>(new SeededRandom(12345))
 
   const [mounted, setMounted] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
@@ -183,27 +197,28 @@ const PremiumBackground = () => {
       }
 
       reset() {
-        this.x = Math.random() * window.innerWidth
-        this.y = Math.random() * window.innerHeight
-        this.size = Math.random() * 2 + 1
-        this.opacity = Math.random() * 0.4 + 0.2
-        this.velocityX = (Math.random() - 0.5) * 1.2
-        this.velocityY = (Math.random() - 0.5) * 1.2
-        this.pulsePhase = Math.random() * Math.PI * 2
+        const rng = seededRandomRef.current
+        this.x = rng.next() * window.innerWidth
+        this.y = rng.next() * window.innerHeight
+        this.size = rng.next() * 2 + 1
+        this.opacity = rng.next() * 0.4 + 0.2
+        this.velocityX = (rng.next() - 0.5) * 1.2
+        this.velocityY = (rng.next() - 0.5) * 1.2
+        this.pulsePhase = rng.next() * Math.PI * 2
 
-        this.rotationSpeed = (Math.random() - 0.5) * 0.02
-        this.orbitRadius = Math.random() * 30 + 10
-        this.orbitAngle = Math.random() * Math.PI * 2
+        this.rotationSpeed = (rng.next() - 0.5) * 0.02
+        this.orbitRadius = rng.next() * 30 + 10
+        this.orbitAngle = rng.next() * Math.PI * 2
         this.baseX = this.x
         this.baseY = this.y
-        this.floatOffset = Math.random() * Math.PI * 2
-        this.scalePhase = Math.random() * Math.PI * 2
+        this.floatOffset = rng.next() * Math.PI * 2
+        this.scalePhase = rng.next() * Math.PI * 2
 
-        if (Math.random() < 0.1) {
+        if (rng.next() < 0.1) {
           this.color = "rgba(0, 120, 80, "
         } else {
           const colors = ["rgba(0, 140, 255, ", "rgba(100, 180, 255, "]
-          this.color = colors[Math.floor(Math.random() * colors.length)]
+          this.color = colors[Math.floor(rng.next() * colors.length)]
         }
       }
 
@@ -384,13 +399,14 @@ const PremiumBackground = () => {
       }
 
       reset() {
-        this.x = Math.random() * window.innerWidth
-        this.y = Math.random() * window.innerHeight
-        this.length = Math.random() * 100 + 50
-        this.angle = Math.random() * Math.PI * 2
-        this.speed = Math.random() * 2 + 1
-        this.opacity = Math.random() * 0.3 + 0.1
-        this.color = Math.random() < 0.8 ? "rgba(0, 150, 255, " : "rgba(0, 100, 60, "
+        const rng = seededRandomRef.current
+        this.x = rng.next() * window.innerWidth
+        this.y = rng.next() * window.innerHeight
+        this.length = rng.next() * 100 + 50
+        this.angle = rng.next() * Math.PI * 2
+        this.speed = rng.next() * 2 + 1
+        this.opacity = rng.next() * 0.3 + 0.1
+        this.color = rng.next() < 0.8 ? "rgba(0, 150, 255, " : "rgba(0, 100, 60, "
         this.segments = []
 
         for (let i = 0; i < 15; i++) {
@@ -468,17 +484,18 @@ const PremiumBackground = () => {
       }
 
       reset() {
-        this.x = Math.random() * window.innerWidth
-        this.y = Math.random() * window.innerHeight
-        this.size = Math.random() * 8 + 4
-        this.opacity = Math.random() * 0.2 + 0.1
-        this.velocityX = (Math.random() - 0.5) * 0.5
-        this.velocityY = (Math.random() - 0.5) * 0.5
-        this.pulsePhase = Math.random() * Math.PI * 2
-        this.rotationAngle = Math.random() * Math.PI * 2
+        const rng = seededRandomRef.current
+        this.x = rng.next() * window.innerWidth
+        this.y = rng.next() * window.innerHeight
+        this.size = rng.next() * 8 + 4
+        this.opacity = rng.next() * 0.2 + 0.1
+        this.velocityX = (rng.next() - 0.5) * 0.5
+        this.velocityY = (rng.next() - 0.5) * 0.5
+        this.pulsePhase = rng.next() * Math.PI * 2
+        this.rotationAngle = rng.next() * Math.PI * 2
 
         const orbColors = ["rgba(0, 120, 255, ", "rgba(0, 80, 40, ", "rgba(20, 140, 255, "]
-        this.color = orbColors[Math.floor(Math.random() * orbColors.length)]
+        this.color = orbColors[Math.floor(rng.next() * orbColors.length)]
       }
 
       draw() {
@@ -542,15 +559,16 @@ const PremiumBackground = () => {
       }
 
       reset() {
-        this.x = Math.random() * window.innerWidth
-        this.y = Math.random() * window.innerHeight
+        const rng = seededRandomRef.current
+        this.x = rng.next() * window.innerWidth
+        this.y = rng.next() * window.innerHeight
         this.radius = 0
-        this.maxRadius = Math.random() * 200 + 100
-        this.opacity = Math.random() * 0.1 + 0.05
-        this.speed = Math.random() * 0.5 + 0.3
+        this.maxRadius = rng.next() * 200 + 100
+        this.opacity = rng.next() * 0.1 + 0.05
+        this.speed = rng.next() * 0.5 + 0.3
 
         const waveColors = ["rgba(0, 120, 255, ", "rgba(0, 80, 40, "]
-        this.color = waveColors[Math.floor(Math.random() * waveColors.length)]
+        this.color = waveColors[Math.floor(rng.next() * waveColors.length)]
       }
 
       draw() {
@@ -600,15 +618,16 @@ const PremiumBackground = () => {
       }
 
       reset() {
-        this.x = Math.random() * window.innerWidth
-        this.y = Math.random() * window.innerHeight
-        this.size = Math.random() * 1.5 + 0.5
-        this.maxOpacity = Math.random() * 0.8 + 0.3
+        const rng = seededRandomRef.current
+        this.x = rng.next() * window.innerWidth
+        this.y = rng.next() * window.innerHeight
+        this.size = rng.next() * 1.5 + 0.5
+        this.maxOpacity = rng.next() * 0.8 + 0.3
         this.opacity = this.maxOpacity
-        this.twinklePhase = Math.random() * Math.PI * 2
-        this.twinkleSpeed = Math.random() * 0.02 + 0.01
-        this.velocityX = (Math.random() - 0.5) * 0.3
-        this.velocityY = (Math.random() - 0.5) * 0.3
+        this.twinklePhase = rng.next() * Math.PI * 2
+        this.twinkleSpeed = rng.next() * 0.02 + 0.01
+        this.velocityX = (rng.next() - 0.5) * 0.3
+        this.velocityY = (rng.next() - 0.5) * 0.3
       }
 
       draw() {
@@ -659,6 +678,8 @@ const PremiumBackground = () => {
         if (this.y > window.innerHeight + 10) this.y = -10
       }
     }
+
+    seededRandomRef.current = new SeededRandom(12345)
 
     const particles: ElegantParticle[] = []
     const floatingOrbs: FloatingOrb[] = []
@@ -762,7 +783,7 @@ const PremiumBackground = () => {
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [mounted, prefersReducedMotion, theme, isLowEndDevice, performanceConfig, createBackgroundCanvas])
+  }, [mounted, prefersReducedMotion, isLowEndDevice, performanceConfig, createBackgroundCanvas])
 
   if (!mounted || prefersReducedMotion) return null
 
