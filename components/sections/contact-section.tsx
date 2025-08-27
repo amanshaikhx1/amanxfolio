@@ -72,39 +72,40 @@ const ContactSection = () => {
   }
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault()
-  if (!validateForm()) return
+    e.preventDefault()
+    if (!validateForm()) return
 
-  setIsSubmitting(true)
-  setSubmitStatus(null)
+    setIsSubmitting(true)
+    setSubmitStatus(null)
 
-  try {
-    const recipientEmail = "amanshaikhx01@gmail.com" // apna Gmail yahan
+    try {
+      const recipientEmail = "amanshaikhx01@gmail.com" // apna Gmail yahan
+      const subject = encodeURIComponent(formData.subject)
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      )
 
-    // Gmail compose URL
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-      recipientEmail
-    )}&su=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    )}`
+      // mailto link for mobile Gmail app
+      const mailtoLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`
 
-    // Open Gmail in new tab
-    window.open(gmailLink, "_blank")
+      // open mailto link
+      window.location.href = mailtoLink
 
-    setSubmitStatus({
-      type: "success",
-      message:
-        "Gmail compose window should open now. Please send your message from there.",
-    })
-  } catch (error) {
-    setSubmitStatus({
-      type: "error",
-      message: "There was an error. Please try again.",
-    })
-  } finally {
-    setIsSubmitting(false)
+      setSubmitStatus({
+        type: "success",
+        message:
+          "Your Gmail app should open now. Please send your message from there.",
+      })
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "There was an error. Please try again.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
-}
+
 
 
   const socialLinks = [
@@ -263,11 +264,10 @@ const ContactSection = () => {
 
               {submitStatus && (
                 <div
-                  className={`p-3 rounded-lg text-center ${
-                    submitStatus.type === "success"
-                      ? "bg-green-500/20 text-green-500"
-                      : "bg-red-500/20 text-red-500"
-                  }`}
+                  className={`p-3 rounded-lg text-center ${submitStatus.type === "success"
+                    ? "bg-green-500/20 text-green-500"
+                    : "bg-red-500/20 text-red-500"
+                    }`}
                 >
                   {submitStatus.message}
                 </div>
