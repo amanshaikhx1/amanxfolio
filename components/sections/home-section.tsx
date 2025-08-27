@@ -7,8 +7,8 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-// 👉 DarkVeil background import
-import DarkVeil from "@/components/darkveilbackground";
+// 👉 Lightweight Background import
+import HomeBackground from "@/components/homebackground";
 
 // ✅ Dynamic import for TypeAnimation (no blocking SSR)
 const TypeAnimation = dynamic(
@@ -41,17 +41,9 @@ const HomeSection = () => {
       id="home"
       className="relative flex items-center min-h-screen w-full overflow-hidden"
     >
-      {/* ✅ DarkVeil Background */}
+      {/* ✅ Lightweight Background */}
       <div className="absolute inset-0 -z-10">
-        <DarkVeil
-          hueShift={30}          // 👈 rang shift (0–360)
-          noiseIntensity={0}     // 👈 clean background (0 = no noise)
-          scanlineIntensity={0}  // 👈 disable scanlines
-          speed={0.5}            // 👈 animation speed
-          scanlineFrequency={0}  // 👈 disable scanline effect
-          warpAmount={0}      // 👈 thoda warp distortion
-          resolutionScale={1}    // 👈 quality control
-        />
+        <HomeBackground />
       </div>
 
       {/* Scroll Indicator */}
@@ -111,7 +103,8 @@ const HomeSection = () => {
                   href="#contact"
                   onClick={(e) => {
                     e.preventDefault();
-                    const contactSection = document.getElementById("contact");
+                    const contactSection =
+                      document.getElementById("contact");
                     if (contactSection) {
                       window.scrollTo({
                         top: contactSection.offsetTop - 80,
