@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion"
 
-// Simple seeded random number generator for consistent star positions
 function seededRandom(seed: number) {
   let x = Math.sin(seed) * 10000
   return x - Math.floor(x)
@@ -11,7 +10,6 @@ function seededRandom(seed: number) {
 export default function HomeBackground() {
   const reduceMotion = useReducedMotion()
 
-  // Generate 50 stars with fixed positions
   const stars = Array.from({ length: 50 }).map((_, i) => {
     const seed = i + 12345
     return {
@@ -23,29 +21,28 @@ export default function HomeBackground() {
   })
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a]"> {/* fixed dark background */}
-
-      {/* Static White Stars */}
-      <div className="absolute inset-0 z-[1] pointer-events-none" aria-hidden="true">
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a]">
+      
+      {/* Static Stars */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
         {stars.map((star) => (
           <div
             key={star.id}
-            className="absolute rounded-full bg-white/80"
+            className="absolute rounded-full bg-white/60"
             style={{
               left: star.left,
               top: star.top,
               width: star.size,
               height: star.size,
-              opacity: 0.6,
             }}
           />
         ))}
       </div>
 
-      {/* Animated Curved Lines */}
-      <div className="absolute inset-0 overflow-hidden z-[2]">
+      {/* Curved Lines */}
+      {typeof window !== "undefined" && window.innerWidth >= 768 && !reduceMotion && (
         <svg
-          className="absolute h-full w-full"
+          className="absolute inset-0 w-full h-full z-[2] pointer-events-none"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1000 700"
           preserveAspectRatio="none"
@@ -57,12 +54,11 @@ export default function HomeBackground() {
               <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
             </linearGradient>
           </defs>
-
           {[
-            { d: "M 100 100 Q 300 0 500 100 T 900 100", delay: 0 },
-            { d: "M 0 200 Q 200 100 400 200 T 800 200", delay: 0.5 },
-            { d: "M 100 600 Q 300 500 500 600 T 900 600", delay: 1 },
-          ].map((curve, i) => (
+            "M 100 100 Q 300 0 500 100 T 900 100",
+            "M 0 200 Q 200 100 400 200 T 800 200",
+            "M 100 600 Q 300 500 500 600 T 900 600",
+          ].map((d, i) => (
             <motion.path
               key={i}
               initial={{ pathLength: 0, opacity: 0 }}
@@ -70,12 +66,11 @@ export default function HomeBackground() {
               transition={{
                 duration: 2,
                 ease: "easeInOut",
-                repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
+                repeat: Number.POSITIVE_INFINITY,
                 repeatType: "loop",
-                repeatDelay: 1,
-                delay: curve.delay,
+                delay: i * 0.5,
               }}
-              d={curve.d}
+              d={d}
               fill="none"
               stroke="url(#grad1)"
               strokeWidth="0.8"
@@ -83,27 +78,20 @@ export default function HomeBackground() {
             />
           ))}
         </svg>
+      )}
 
-        {/* Straight Lines */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0"
-        >
+      {/* Straight Lines */}
+      {typeof window !== "undefined" && window.innerWidth >= 768 && !reduceMotion && (
+        <div className="absolute inset-0 z-[2] pointer-events-none">
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
               initial={{ x: "100%", opacity: 0 }}
-              animate={{
-                x: "-100%",
-                opacity: reduceMotion ? 0.4 : [0, 0.7, 0.7, 0],
-              }}
+              animate={{ x: "-100%", opacity: [0, 0.7, 0.7, 0] }}
               transition={{
-                duration: reduceMotion ? 0 : 2.6,
-                delay: reduceMotion ? 0 : i * 0.2,
-                repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
-                repeatType: "loop",
+                duration: 2.6,
+                delay: i * 0.2,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "linear",
               }}
               className={`absolute right-0 ${i === 2 ? "hidden md:block" : ""}`}
@@ -111,15 +99,16 @@ export default function HomeBackground() {
                 top: `${15 + i * 10}%`,
                 height: "1px",
                 width: "100%",
-                background: "linear-gradient(90deg, transparent, #22d3ee60, transparent)",
+                background:
+                  "linear-gradient(90deg, transparent, #22d3ee60, transparent)",
               }}
             />
           ))}
-        </motion.div>
-      </div>
+        </div>
+      )}
 
-      {/* Animated Center Glow (same as original) */}
-      <div className="absolute inset-0 z-[3] pointer-events-none" aria-hidden="true">
+      {/* Center Glow */}
+      <div className="absolute inset-0 z-[3] pointer-events-none">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -128,11 +117,12 @@ export default function HomeBackground() {
         />
       </div>
 
-      {/* Subtle Vignette */}
+      {/* Vignette */}
       <div
         className="pointer-events-none absolute inset-0 z-[4]"
         style={{
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent, rgba(0,0,0,0.6))",
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent, rgba(0,0,0,0.6))",
         }}
         aria-hidden="true"
       />
