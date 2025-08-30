@@ -196,9 +196,7 @@ const Header = () => {
     if (link.type === "navigate") {
       return pathname === link.href || pathname.startsWith(link.href);
     }
-    const currentHash = typeof window !== "undefined" ? window.location.hash : "";
-    return (pathname === "/" || pathname === "/#" + link.href.substring(1)) && 
-           (activeSection === link.href.substring(1) || currentHash === link.href);
+    return pathname === "/" && activeSection === link.href.substring(1);
   };
 
   return (

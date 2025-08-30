@@ -11,7 +11,7 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     qualities: [60, 70, 75, 80, 90, 100],
-    domains: [],
+    domains: ['tvqexlemfqngcctooreu.supabase.co'], // ✅ Supabase domain
   },
   typedRoutes: true,
   experimental: { optimizeCss: true },

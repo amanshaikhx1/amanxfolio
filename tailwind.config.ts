@@ -118,7 +118,7 @@ const config = {
       },
     },
   },
-  plugins: [], // Removed tailwindcss-animate to reduce CSS/JS bundle
+  plugins: [require('@tailwindcss/typography')],
 } satisfies Config;
 
 export default config;

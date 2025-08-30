@@ -1,28 +1,43 @@
 "use client"
 
 import { motion, useReducedMotion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 function seededRandom(seed: number) {
   let x = Math.sin(seed) * 10000
   return x - Math.floor(x)
 }
 
+interface Star {
+  id: number
+  left: string
+  top: string
+  size: string
+}
+
 export default function HomeBackground() {
   const reduceMotion = useReducedMotion()
+  const [stars, setStars] = useState<Star[]>([])
+  const [isClient, setIsClient] = useState(false)
 
-  const stars = Array.from({ length: 50 }).map((_, i) => {
-    const seed = i + 12345
-    return {
-      id: i,
-      left: `${seededRandom(seed) * 100}%`,
-      top: `${seededRandom(seed + 1) * 100}%`,
-      size: `${seededRandom(seed + 2) * 2 + 1}px`,
-    }
-  })
+  // Only generate stars on client to avoid hydration mismatch
+  useEffect(() => {
+    setIsClient(true)
+
+    const generatedStars = Array.from({ length: 50 }).map((_, i) => {
+      const seed = i + 12345
+      return {
+        id: i,
+        left: `${seededRandom(seed) * 100}%`,
+        top: `${seededRandom(seed + 1) * 100}%`,
+        size: `${seededRandom(seed + 2) * 2 + 1}px`,
+      }
+    })
+    setStars(generatedStars)
+  }, [])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a]">
-      
       {/* Static Stars */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
         {stars.map((star) => (
@@ -40,7 +55,7 @@ export default function HomeBackground() {
       </div>
 
       {/* Curved Lines */}
-      {typeof window !== "undefined" && window.innerWidth >= 768 && !reduceMotion && (
+      {isClient && window.innerWidth >= 768 && !reduceMotion && (
         <svg
           className="absolute inset-0 w-full h-full z-[2] pointer-events-none"
           xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +96,7 @@ export default function HomeBackground() {
       )}
 
       {/* Straight Lines */}
-      {typeof window !== "undefined" && window.innerWidth >= 768 && !reduceMotion && (
+      {isClient && window.innerWidth >= 768 && !reduceMotion && (
         <div className="absolute inset-0 z-[2] pointer-events-none">
           {[0, 1, 2].map((i) => (
             <motion.div
