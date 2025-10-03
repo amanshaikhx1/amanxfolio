@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Share2, Printer, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../components/ui/button";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { supabase } from "@/app/lib/supabase";

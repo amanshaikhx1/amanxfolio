@@ -172,12 +172,15 @@ const Header = () => {
     closeMobileMenu();
 
     if (link.type === "navigate") {
-      router.push(link.href);
+      router.push(link.href as Route<string>);
     } else {
-      if (pathname.startsWith("/blog")) {
-        router.push(`/${link.href}`);
+      const targetId = link.href.substring(1);
+      if (pathname !== "/") {
+        // If not on home, navigate to home with hash (use string URL to avoid router.push object bug)
+        router.push(`/#${targetId}`);
+        // Scrolling will be handled by hashchange effect on the destination page
       } else {
-        const targetId = link.href.substring(1);
+        // Already on home, scroll to section
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
           window.scrollTo({
@@ -186,7 +189,8 @@ const Header = () => {
           });
           setActiveSection(targetId);
         } else {
-          console.warn(`Element with id ${targetId} not found`);
+          // If not found, update hash to trigger hashchange effect
+          window.location.hash = targetId;
         }
       }
     }
@@ -269,6 +273,27 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-4 z-60">
+            {/* Data Tools Dropdown - only show on md and up */}
+            <div className="relative group hidden md:block">
+              <button
+                tabIndex={0}
+                // className="flex items-center px-4 py-2 rounded-full bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 text-white font-semibold focus:outline-none"
+              >
+                Data Tools
+                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className="absolute right-0 mt-2 w-56 bg-gray-900 border border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 z-50 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                <Link
+                  href={"/data-tools" as Route<"/data-tools">}
+                  className="block px-4 py-3 text-white hover:bg-gray-800 rounded-t-lg transition-colors duration-150"
+                >
+                  Auto Dashboard
+                </Link>
+                {/* Add more tools here as needed */}
+              </div>
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -321,6 +346,27 @@ const Header = () => {
                 {link.label}
               </Link>
             ))}
+            {/* Data Tools Dropdown for Mobile */}
+            <div className="relative group mt-2">
+              <button
+                className="flex items-center w-full px-4 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-semibold focus:outline-none justify-between"
+                tabIndex={0}
+              >
+                Data Tools
+                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className="mt-1 w-full bg-gray-900 border border-gray-700 rounded-lg shadow-lg opacity-100 transition-opacity duration-200 z-50">
+                <Link
+                  href={"/data-tools" as Route<"/data-tools">}
+                  className="block px-4 py-3 text-white hover:bg-gray-800 rounded-t-lg transition-colors duration-150"
+                >
+                  Auto Dashboard Generator
+                </Link>
+                {/* Add more tools here as needed */}
+              </div>
+            </div>
           </nav>
         </div>
       )}
