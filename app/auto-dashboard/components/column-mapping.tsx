@@ -104,26 +104,27 @@ export default function ColumnMapping() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-0 overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-start sm:items-center space-x-3 w-full sm:w-auto">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setCurrentSection('upload')}
             data-testid="button-back"
+            className="px-3 py-2"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Column Mapping</h2>
-            <p className="text-muted-foreground">Map your data columns to our business analytics fields</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">Column Mapping</h2>
+            <p className="text-sm text-muted-foreground">Map your data columns to our business analytics fields</p>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="text-sm">
+        <div className="flex items-center space-x-4 w-full sm:w-auto">
+          <div className="text-sm text-right w-full sm:w-auto">
             <span className="text-muted-foreground">Progress:</span>
             <span className="ml-2 font-medium">{mappedCount}/5 minimum</span>
           </div>
@@ -131,11 +132,11 @@ export default function ColumnMapping() {
       </div>
 
       {/* Progress Alert */}
-  <Card className={cn("border border-black rounded-lg",
+  <Card className={cn("w-full mb-4 border border-black rounded-lg",
         "border-l-4",
         canProceed ? "border-l-green-500 bg-green-50 dark:bg-green-950/10" : "border-l-amber-500 bg-amber-50 dark:bg-amber-950/10"
       )}>
-        <CardContent className="pt-4">
+        <CardContent className="pt-4 p-3">
           <div className="flex items-center">
             {canProceed ? (
               <CheckCircle className="h-5 w-5 text-green-600 mr-3" />
@@ -164,21 +165,21 @@ export default function ColumnMapping() {
         </CardContent>
       </Card>
 
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Your Data Columns */}
-        <Card>
+        <Card className="w-full mb-4">
           <CardHeader>
             <CardTitle>Your Data Columns</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3">
             <div className="space-y-3">
               {mappings.map((mapping) => (
                 <div 
                   key={mapping.sourceColumn}
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors"
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border rounded-lg hover:bg-accent/50 transition-colors"
                   data-testid={`column-${mapping.sourceColumn}`}
                 >
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 w-full sm:w-auto">
                     <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
                       <span className="text-xs font-medium">{mapping.dataType[0].toUpperCase()}</span>
                     </div>
@@ -187,21 +188,24 @@ export default function ColumnMapping() {
                       <p className="text-xs text-muted-foreground capitalize">{mapping.dataType}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    {mapping.mapped ? (
-                      <Badge variant="default" className="bg-green-100 text-green-800">
-                        Mapped
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary">
-                        Unmapped
-                      </Badge>
-                    )}
-                    {mapping.confidence > 0 && (
-                      <span className="text-xs text-muted-foreground">
-                        {mapping.confidence}%
-                      </span>
-                    )}
+                  <div className="flex items-center space-x-2 mt-2 sm:mt-0 w-full sm:w-auto justify-between">
+                    <div className="flex items-center space-x-2">
+                      {mapping.mapped ? (
+                        <Badge variant="default" className="bg-green-100 text-green-800">
+                          Mapped
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary">
+                          Unmapped
+                        </Badge>
+                      )}
+                      {mapping.confidence > 0 && (
+                        <span className="text-xs text-muted-foreground">
+                          {mapping.confidence}%
+                        </span>
+                      )}
+                    </div>
+                    {/* optional actions could go here in future */}
                   </div>
                 </div>
               ))}
@@ -210,7 +214,7 @@ export default function ColumnMapping() {
         </Card>
 
         {/* Business Data Fields */}
-        <Card>
+        <Card className="w-full mb-4">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Business Data Fields</CardTitle>
@@ -219,7 +223,7 @@ export default function ColumnMapping() {
                 <Input
                   type="text"
                   placeholder="Search 183 fields..."
-                  className="pl-9 w-64"
+                  className="pl-9 w-full sm:w-64"
                   value={searchTerm}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                   data-testid="input-search-fields"
@@ -227,8 +231,8 @@ export default function ColumnMapping() {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+          <CardContent className="p-3">
+            <div className="space-y-4 max-h-80 overflow-y-auto">
               {filteredCategories.map(([category, fields]) => {
                 const isExpanded = expandedCategories.has(category);
                 const matchedFields = fields.filter(field => getMappedBusinessField(field.name));
@@ -256,7 +260,7 @@ export default function ColumnMapping() {
                     </button>
                     
                     {isExpanded && (
-                      <div className="p-4 space-y-2 bg-card">
+                      <div className="p-3 space-y-2 bg-card">
                         {fields
                           .filter(field => 
                             !searchTerm || 
@@ -271,7 +275,7 @@ export default function ColumnMapping() {
                               <div
                                 key={field.id}
                                 className={cn(
-                                  "flex items-center justify-between p-2 border rounded cursor-pointer transition-colors",
+                                  "flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 border rounded cursor-pointer transition-colors",
                                   isMapped 
                                     ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/20" 
                                     : "border hover:bg-accent/30"
@@ -293,7 +297,7 @@ export default function ColumnMapping() {
                                 }}
                                 data-testid={`field-${field.id}`}
                               >
-                                <div className="flex-1">
+                                <div className="flex-1 w-full">
                                   <span className="text-sm font-medium text-foreground">{field.name}</span>
                                   <p className="text-xs text-muted-foreground mt-1">{field.description}</p>
                                   {isMapped && mappedColumn && (
@@ -302,13 +306,15 @@ export default function ColumnMapping() {
                                     </p>
                                   )}
                                 </div>
-                                <Button
-                                  variant={isMapped ? "destructive" : "default"}
-                                  size="sm"
-                                  className="ml-2"
-                                >
-                                  {isMapped ? "Unmap" : "Map"}
-                                </Button>
+                                <div className="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2">
+                                  <Button
+                                    variant={isMapped ? "destructive" : "default"}
+                                    size="sm"
+                                    className="w-full sm:w-auto"
+                                  >
+                                    {isMapped ? "Unmap" : "Map"}
+                                  </Button>
+                                </div>
                               </div>
                             );
                           })}
@@ -324,7 +330,7 @@ export default function ColumnMapping() {
               <Button
                 onClick={startAnalysis}
                 disabled={!canProceed}
-                className="px-8"
+                className="w-full sm:w-auto px-8"
                 data-testid="button-start-analysis"
               >
                 Start Analysis

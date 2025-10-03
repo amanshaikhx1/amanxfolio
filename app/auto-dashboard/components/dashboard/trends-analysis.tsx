@@ -109,22 +109,24 @@ export default function TrendsAnalysis() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-0 overflow-x-hidden">
       {/* Time Period Selector */}
     <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <CardTitle>Time Period Analysis</CardTitle>
-            <div className="flex space-x-2 overflow-x-auto md:overflow-visible pb-1 -mx-2 md:mx-0 px-2 md:px-0">
+            <div className="grid grid-cols-2 gap-2 sm:inline-flex sm:items-center sm:gap-2 pb-1 -mx-4 md:mx-0 px-4 md:px-0 rounded-md bg-card/5 border border-border p-2">
               {periodButtons.map((period) => (
-                <div key={period.id} className="flex-shrink-0">
+                <div key={period.id} className="w-full">
                   <Button
                     key={period.id}
                     variant={selectedPeriod === period.id ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedPeriod(period.id)}
                     data-testid={`button-period-${period.id}`}
-                    className="min-w-[84px]"
+                    aria-pressed={selectedPeriod === period.id}
+                    aria-label={`Select ${period.label} period`}
+                    className={cn('w-full sm:min-w-[96px] py-3 rounded-md text-sm', selectedPeriod === period.id ? 'bg-emerald-500 text-white shadow-sm' : 'bg-transparent')}
                   >
                     {period.label}
                   </Button>
@@ -136,10 +138,10 @@ export default function TrendsAnalysis() {
       </Card>
 
       {/* Sales Trends Chart */}
-    <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+    <Card className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
         <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-          <CardTitle className="flex flex-col md:flex-row items-start md:items-center">
-            <span>Sales Trends Overview</span>
+          <CardTitle className="flex flex-col md:flex-row items-start md:items-center text-lg font-semibold md:text-xl">
+            <span className="text-lg md:text-xl">Sales Trends Overview</span>
             <div className="flex items-center space-x-4 text-sm mt-2 md:mt-0 md:ml-4">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-chart-1 rounded-full"></div>
@@ -151,9 +153,9 @@ export default function TrendsAnalysis() {
               </div>
             </div>
           </CardTitle>
-          <Dialog>
-             <DialogTrigger asChild>
-                <Button size="icon" variant="ghost" className="ml-2" aria-label="Fullscreen Sales Trends">
+       <Dialog>
+         <DialogTrigger asChild>
+           <Button size="icon" variant="ghost" className="ml-2 inline-flex p-2" aria-label="Fullscreen Sales Trends">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9V5.25A2.25 2.25 0 0 1 6 3h3.75M20.25 15v3.75A2.25 2.25 0 0 1 18 21h-3.75M15 3.75H18A2.25 2.25 0 0 1 20.25 6v3.75M9 20.25H6A2.25 2.25 0 0 1 3.75 18V15" />
                   </svg>
@@ -224,31 +226,35 @@ export default function TrendsAnalysis() {
             </DialogContent>
           </Dialog>
         </CardHeader>
-        <CardContent>
-          <div className="h-64 md:h-96" data-testid="chart-sales-trends">
+        <CardContent className="p-3 md:p-6">
+          <div className="w-full h-[38vh] sm:h-64 md:h-96" data-testid="chart-sales-trends">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData}>
+              <LineChart data={trendData} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                 <XAxis 
                   dataKey="period" 
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#94a3b8' }}
+                  angle={-30}
+                  textAnchor="end"
+                  height={48}
                 />
                 <YAxis 
                   yAxisId="revenue"
                   orientation="left"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#94a3b8' }}
                   tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                 />
                 <YAxis 
                   yAxisId="transactions"
                   orientation="right"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#94a3b8' }}
                 />
                 <Tooltip 
                   formatter={(value: number, name: string) => [
                     name === 'revenue' ? `$${value.toLocaleString()}` : value.toLocaleString(),
                     name === 'revenue' ? 'Revenue' : 'Transactions'
                   ]}
+                  wrapperStyle={{ touchAction: 'manipulation' }}
                 />
                   <Line 
                     yAxisId="revenue"
@@ -258,17 +264,19 @@ export default function TrendsAnalysis() {
                     strokeWidth={3}
                     dot={{ fill: "#1976d2", strokeWidth: 2, r: 5 }}
                     connectNulls={true}
+                    animationDuration={0}
                   />
-                <Line 
-                  yAxisId="transactions"
-                  type="monotone" 
-                  dataKey="transactions" 
-                        stroke={CHART_COLORS[1]}
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                        dot={{ fill: CHART_COLORS[1], strokeWidth: 2, r: 4 }}
-                  connectNulls={true}
-                />
+        <Line 
+      yAxisId="transactions"
+      type="monotone" 
+      dataKey="transactions" 
+        stroke={CHART_COLORS[1]}
+      strokeWidth={2}
+      strokeDasharray="5 5"
+        dot={{ fill: CHART_COLORS[1], strokeWidth: 2, r: 4 }}
+      connectNulls={true}
+      animationDuration={0}
+        />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -277,14 +285,14 @@ export default function TrendsAnalysis() {
 
       {/* Growth Metrics & Seasonal Patterns */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+    <Card className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
           <CardHeader>
             <CardTitle>Growth Rate Analysis</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 md:p-6">
             <div className="space-y-4">
               {growthMetrics.map((metric, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-accent/30 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-3 bg-accent/30 rounded-lg w-full">
                   <div>
                     <p className="text-sm font-medium text-foreground">{metric.title}</p>
                     <p className="text-xs text-muted-foreground">{metric.description}</p>
@@ -302,25 +310,29 @@ export default function TrendsAnalysis() {
           </CardContent>
         </Card>
 
-    <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+    <Card className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
           <CardHeader>
             <CardTitle>Seasonal Patterns</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-64" data-testid="chart-seasonal-patterns">
+          <CardContent className="p-3 md:p-6">
+            <div className="w-full h-[28vh] sm:h-44 md:h-64" data-testid="chart-seasonal-patterns">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                   <XAxis 
                     dataKey="period" 
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: '#94a3b8' }}
+                    angle={-30}
+                    textAnchor="end"
+                    height={48}
                   />
                   <YAxis 
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: '#94a3b8' }}
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
                   <Tooltip 
                     formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
+                    wrapperStyle={{ touchAction: 'manipulation' }}
                   />
                   <Area
                     type="monotone"
@@ -328,6 +340,7 @@ export default function TrendsAnalysis() {
                       stroke={CHART_COLORS[2]}
                       fill={CHART_COLORS[2]}
                     fillOpacity={0.3}
+                    animationDuration={0}
                   />
                 </AreaChart>
               </ResponsiveContainer>

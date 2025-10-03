@@ -183,7 +183,7 @@ export default function MarketingAnalysis() {
   const COLORS = CHART_COLORS.slice(0, 4);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-0 overflow-x-hidden">
       {/* Data Availability Notice */}
       <div className="border border-amber-200 bg-amber-50 dark:bg-amber-950/10 rounded-lg p-4 flex items-start gap-3">
         <Info className="h-4 w-4 text-amber-600 mt-1" />
@@ -201,8 +201,8 @@ export default function MarketingAnalysis() {
         {marketingKPIs.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <Card key={index} className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
-        <CardContent className="p-6">
+      <Card key={index} className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+    <CardContent className="p-3 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{kpi.title}</p>
@@ -229,34 +229,64 @@ export default function MarketingAnalysis() {
               <Target className="h-5 w-5 mr-2" />
               Campaign Performance Details
             </CardTitle>
-            <div className="flex space-x-2 overflow-x-auto pb-1 -mx-2 px-2">
-              <div className="flex-shrink-0">
-                <Button
-                  variant={selectedTimeframe === 'monthly' ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedTimeframe('monthly')}
-                  data-testid="button-timeframe-monthly"
-                  className="min-w-[96px]"
-                >
-                  Monthly
-                </Button>
-              </div>
-              <div className="flex-shrink-0">
-                <Button
-                  variant={selectedTimeframe === 'quarterly' ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedTimeframe('quarterly')}
-                  data-testid="button-timeframe-quarterly"
-                  className="min-w-[96px]"
-                >
-                  Quarterly
-                </Button>
+            <div className="w-full md:w-auto">
+              <div className="grid grid-cols-2 gap-2 pb-1 -mx-2 md:mx-0 px-2 md:px-0 rounded-md bg-card/5 border border-border p-2">
+                {[
+                  { id: 'monthly', label: 'Monthly' },
+                  { id: 'quarterly', label: 'Quarterly' }
+                ].map((b) => (
+                  <div key={b.id} className="w-full">
+                    <Button
+                      size="sm"
+                      onClick={() => setSelectedTimeframe(b.id as 'monthly' | 'quarterly')}
+                      aria-pressed={selectedTimeframe === b.id}
+                      aria-label={`Select ${b.label} timeframe`}
+                      className={cn('w-full py-3 rounded-md text-sm', selectedTimeframe === b.id ? 'bg-emerald-500 text-white shadow-sm' : 'bg-transparent')}
+                      data-testid={`button-timeframe-${b.id}`}
+                    >
+                      {b.label}
+                    </Button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto mb-6">
+          {/* Small-screen stacked list */}
+          <div className="space-y-3 sm:hidden mb-4">
+            {campaignData.map((campaign, index) => (
+              <div key={index} className="p-3 bg-card/5 border border-border rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <div className="font-medium text-foreground">{campaign.name}</div>
+                    <div className="text-xs text-muted-foreground">{campaign.period}</div>
+                  </div>
+                  <Badge variant={campaign.status === 'Active' ? 'default' : 'secondary'}>{campaign.status}</Badge>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <div className="text-muted-foreground">Reach</div>
+                    <div className="font-medium">{campaign.reach.toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Conversions</div>
+                    <div className="font-medium">{campaign.conversions.toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Spend</div>
+                    <div className="font-medium">${campaign.spend.toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Revenue</div>
+                    <div className="font-medium">${campaign.revenue.toLocaleString()}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="overflow-x-auto mb-6 hidden sm:block">
             <table className="w-full text-sm" data-testid="table-campaign-details">
               <thead>
                 <tr className="border-b border-border">
@@ -294,7 +324,7 @@ export default function MarketingAnalysis() {
           </div>
 
           {/* Performance Chart */}
-          <div className="h-80" data-testid="chart-campaign-performance">
+          <div className="w-full h-[38vh] sm:h-64 md:h-80" data-testid="chart-campaign-performance">
             <div className="flex justify-end mb-2">
               <Dialog>
                 <DialogTrigger asChild>
@@ -315,7 +345,7 @@ export default function MarketingAnalysis() {
                       </Button>
                     </DialogClose>
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={performanceData}>
+                      <LineChart data={performanceData} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                         <XAxis dataKey="period" tick={{ fontSize: 14, fill: '#fff' }} />
                         <YAxis 
@@ -343,19 +373,21 @@ export default function MarketingAnalysis() {
                           yAxisId="reach"
                           type="monotone" 
                           dataKey="reach" 
-                          stroke="#1976d2" 
+                          stroke={CHART_COLORS[0]} 
                           strokeWidth={3}
-                          dot={{ fill: "#1976d2", strokeWidth: 2, r: 5 }}
+                          dot={{ fill: CHART_COLORS[0], strokeWidth: 2, r: 4 }}
                           connectNulls={true}
+                          animationDuration={0}
                         />
                         <Line 
                           yAxisId="revenue"
                           type="monotone" 
                           dataKey="revenue" 
-                          stroke="#eab308" 
+                          stroke={CHART_COLORS[4]} 
                           strokeWidth={3}
-                          dot={{ fill: "#eab308", strokeWidth: 2, r: 5 }}
+                          dot={{ fill: CHART_COLORS[4], strokeWidth: 2, r: 4 }}
                           connectNulls={true}
+                          animationDuration={0}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -364,19 +396,19 @@ export default function MarketingAnalysis() {
               </Dialog>
             </div>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={performanceData}>
+              <LineChart data={performanceData} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                <XAxis dataKey="period" tick={{ fontSize: 12 }} />
+                <XAxis dataKey="period" tick={{ fontSize: 12, fill: '#94a3b8' }} angle={-30} textAnchor="end" height={48} />
                 <YAxis 
                   yAxisId="reach"
                   orientation="left"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#94a3b8' }}
                   tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
                 />
                 <YAxis 
                   yAxisId="revenue"
                   orientation="right"
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#94a3b8' }}
                   tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                 />
                 <Tooltip 
@@ -386,24 +418,27 @@ export default function MarketingAnalysis() {
                     name === 'conversions' ? 'Conversions' : 
                     name === 'spend' ? 'Spend' : 'Revenue'
                   ]}
+                  wrapperStyle={{ touchAction: 'manipulation' }}
                 />
                 <Line 
                   yAxisId="reach"
                   type="monotone" 
                   dataKey="reach" 
-                  stroke="#1976d2" 
+                  stroke={CHART_COLORS[0]} 
                   strokeWidth={3}
-                  dot={{ fill: "#1976d2", strokeWidth: 2, r: 5 }}
+                  dot={{ fill: CHART_COLORS[0], strokeWidth: 2, r: 4 }}
                   connectNulls={true}
+                  animationDuration={0}
                 />
                 <Line 
                   yAxisId="revenue"
                   type="monotone" 
                   dataKey="revenue" 
-                  stroke="#eab308" 
+                  stroke={CHART_COLORS[4]} 
                   strokeWidth={3}
-                  dot={{ fill: "#eab308", strokeWidth: 2, r: 5 }}
+                  dot={{ fill: CHART_COLORS[4], strokeWidth: 2, r: 4 }}
                   connectNulls={true}
+                  animationDuration={0}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -413,7 +448,7 @@ export default function MarketingAnalysis() {
 
       {/* Discount Impact & Channel Performance */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+  <Card className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Tag className="h-5 w-5 mr-2" />
@@ -454,7 +489,7 @@ export default function MarketingAnalysis() {
           </CardContent>
         </Card>
 
-  <Card className="border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
+  <Card className="w-full mb-4 border border-black dark:border-white dark:shadow-[0_2px_16px_0_rgba(255,255,255,0.12)] rounded-lg">
           <CardHeader>
             <CardTitle className="flex items-center">
               <BarChart3 className="h-5 w-5 mr-2" />
@@ -462,19 +497,19 @@ export default function MarketingAnalysis() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48 md:h-64" data-testid="chart-channel-performance">
+            <div className="w-full h-[28vh] sm:h-48 md:h-64" data-testid="chart-channel-performance">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={channelData} layout="horizontal">
                   <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                   <XAxis 
                     type="number" 
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: '#94a3b8' }}
                     tickFormatter={(value) => value.toLocaleString()}
                   />
                   <YAxis 
                     dataKey="channel" 
                     type="category" 
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: '#94a3b8' }}
                     width={100}
                   />
                   <Tooltip 
@@ -482,8 +517,9 @@ export default function MarketingAnalysis() {
                       value.toLocaleString(),
                       name === 'conversions' ? 'Conversions' : 'Reach'
                     ]}
+                    wrapperStyle={{ touchAction: 'manipulation' }}
                   />
-                  <Bar dataKey="conversions" fill={CHART_COLORS[1]} radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="conversions" fill={CHART_COLORS[1]} radius={[0, 4, 4, 0]} animationDuration={0} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -503,8 +539,8 @@ export default function MarketingAnalysis() {
 
       {/* Marketing Summary Metrics */}
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <Card className="shadow-sm text-center">
-          <CardContent className="pt-6">
+        <Card className="w-full mb-4 shadow-sm text-center">
+          <CardContent className="pt-6 p-3 md:p-6">
             <Target className="h-12 w-12 text-primary mx-auto mb-4" />
             <p className="text-2xl font-bold text-foreground" data-testid="text-total-reach">
               {channelData.reduce((sum, channel) => sum + channel.reach, 0).toLocaleString()}
@@ -517,7 +553,7 @@ export default function MarketingAnalysis() {
         </Card>
 
         <Card className="shadow-sm text-center">
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 p-3 md:p-6">
             <MousePointer className="h-12 w-12 text-green-600 mx-auto mb-4" />
             <p className="text-2xl font-bold text-foreground" data-testid="text-conversion-rate">
               4.7%
@@ -530,7 +566,7 @@ export default function MarketingAnalysis() {
         </Card>
 
         <Card className="shadow-sm text-center">
-          <CardContent className="pt-6">
+          <CardContent className="pt-6 p-3 md:p-6">
             <DollarSign className="h-12 w-12 text-chart-2 mx-auto mb-4" />
             <p className="text-2xl font-bold text-foreground" data-testid="text-marketing-roi">
               342%
