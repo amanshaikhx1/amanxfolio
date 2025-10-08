@@ -245,7 +245,7 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center absolute left-[55%] transform -translate-x-1/2">
+          <div id="centerNav" className="hidden lg:flex items-center absolute left-[55%] transform -translate-x-1/2">
             <div
               className="flex items-center space-x-2 rounded-full px-6 py-3 border border-border/30"
               style={{ backgroundColor: "hsl(217.2deg 34.22% 8%)" }}
@@ -274,7 +274,7 @@ const Header = () => {
 
           <div className="flex items-center gap-4 z-60">
             {/* Data Tools Dropdown - only show on md and up */}
-            <div className="relative group hidden md:block">
+            <div id="dataTools" className="relative group hidden lg:block">
               <button
                 tabIndex={0}
                 // className="flex items-center px-4 py-2 rounded-full bg-gray-800 dark:bg-gray-800 hover:bg-gray-700 text-white font-semibold focus:outline-none"
@@ -309,7 +309,7 @@ const Header = () => {
                 <Sun className="h-5 w-5 text-yellow-500" />
               )}
             </Button>
-            <label className="hamburger cursor-pointer md:hidden">
+            <label id="hamburger" className="hamburger cursor-pointer md:block lg:hidden">
               <input
                 type="checkbox"
                 checked={isMobileMenuOpen}
@@ -328,7 +328,8 @@ const Header = () => {
       </div>
       {isMobileMenuOpen && (
         <div
-          className="fixed left-0 w-full bg-black overflow-y-auto z-40 md:hidden"
+          id="mobileOverlay"
+          className="fixed left-0 w-full bg-black overflow-y-auto z-40 lg:hidden"
           style={{ top: `${headerHeight}px`, height: `calc(100vh - ${headerHeight}px)` }}
         >
           <nav className="flex flex-col px-8 pt-8 space-y-6 bg-black">
@@ -399,6 +400,14 @@ const Header = () => {
         .hamburger input:checked + svg .line-top-bottom {
           stroke-dasharray: 20 300;
           stroke-dashoffset: -32.42;
+        }
+        /* Force mobile-menu on iPad Pro resolutions (portrait and landscape) */
+        @media only screen and (device-width: 1024px) and (device-height: 1366px),
+        only screen and (device-width: 1366px) and (device-height: 1024px) {
+          #centerNav { display: none !important; }
+          #dataTools { display: none !important; }
+          #hamburger { display: block !important; }
+          #mobileOverlay { display: block !important; }
         }
       `}</style>
     </header>
