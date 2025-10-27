@@ -23,6 +23,7 @@ const portfolioItems = [
     date: "---",
     tech: "---",
     description: "Work in progress, Projects will be added soon.",
+    link: "https://projectsaddsoon.com",
   },
   {
     id: "portfolio-3",

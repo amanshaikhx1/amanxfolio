@@ -10,45 +10,45 @@ const educationData = [
     degree: "Bachelor of Computer Applications",
     university: "Amity University",
     description:
-      "Currently pursuing BCA with a strong focus on understanding business systems, data handling, and analytical thinking. Gaining hands-on exposure to Excel, SQL, and basic system concepts useful for business analysis. Also working on self-driven projects and certifications to strengthen practical skills.",
+      "Pursuing BCA with a focus on data analysis, business systems, and analytical problem-solving. Skilled in Excel and SQL, and developing expertise in transforming data into actionable insights through projects.",
   },
   {
     year: "2027 - 2029",
-    degree: "Master of Business Administration",
+    degree: "Master of Science ( Data Science )",
     university: "Amity University",
     description:
-      "Planning to pursue MBA with a focus on business analysis, stakeholder management, and data-driven decision-making. Aim is to build deeper understanding of business domains and leadership-level BA capabilities.",
+      "Planning to pursue a Master's in Data Science to deepen expertise in machine learning, advanced analytics, and data-driven problem-solving. Aiming to strengthen technical and research skills for real-world data applications.",
   },
   {
     year: "2028",
-    degree: "PG Certification – Business Analysis & Project Management",
-    university: "IIT Roorkee (via Intellipaat)",
+    degree: "IIBA® Certification in Business Data Analytics (CBDA)",
+    university: "International Institute of Business Analysis (IIBA)",
     description:
-      "Planning to complete this certification to gain practical knowledge of Agile, SDLC, stakeholder analysis, and project lifecycle using tools like JIRA, Power BI, and Confluence.",
+      "Planning to earn the CBDA certification to validate expertise in business data analytics, including data interpretation, insight generation, and data-driven decision-making for business impact.",
   },
 ];
 
 const experienceData = [
   {
-    year: "2024",
-    position: "Aspiring Business Data Analyst – Learning in Progress",
+    year: "2025",
+    position: "Aspiring Data Analyst – Learning in Progress",
     company: "Independent / Self-Paced",
     description:
-      "Currently building a strong foundation in business analysis through self-study and academics. Exploring core BA concepts like requirement gathering, business processes, and stakeholder communication, along with tools like Excel, Power BI, and SQL.",
+      "Building a strong foundation in data analysis through self-learning and academic projects. Gaining hands-on experience with Excel, SQL, Power BI, and Python while exploring techniques for data cleaning, visualization, and insight generation.",
   },
   {
     year: "2026 (Planned)",
-    position: "ECBA Certification Preparation – IIBA",
+    position: "CBDA Certification Preparation – IIBA®",
     company: "Remote / Independent",
     description:
-      "Following BABOK® Guide to understand requirement elicitation, stakeholder analysis, and solution evaluation. Simulated business case studies and analyzed workflows using tools like JIRA and draw.io.",
+      "Preparing for the IIBA® CBDA certification with focus on business data analytics, data interpretation, and insight generation. Practicing real-world case studies to apply data-driven decision-making using Excel, Power BI, and SQL.",
   },
   {
     year: "2027 (Planned)",
-    position: "Entry-Level Business Data Analyst Role",
-    company: "Target: Fintech / E-commerce / Consulting Domains",
+    position: "Entry-Level Data Analyst Role",
+    company: "Open to Opportunities Across Industries",
     description:
-      "Aiming to apply academic and project-based learning in a real-world environment. Will focus on documenting business requirements, working with cross-functional teams, and supporting product and data-driven decisions.",
+      "Aiming to apply academic and project experience in real-world analytics. Focused on data cleaning, visualization, and insight generation to support data-driven business decisions in cross-functional environments.",
   },
 ];
 

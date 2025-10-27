@@ -239,7 +239,7 @@ const Header = () => {
               </div>
               <div className="flex items-center space-x-1.5">
                 <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors duration-300">
-                  Business Data Analyst
+                  Data Analyst
                 </span>
               </div>
             </div>

@@ -81,11 +81,11 @@ const HomeSection = () => {
                 <span className="text-green-500 font-semibold ml-2 relative">
                   <TypeAnimation
                     sequence={[
-                      "Business Data Analyst.",
+                      "Data Analyst.",
                       2000,
-                      "Data-Driven Decisions.",
+                      "Path: Data Analyst → Data Scientist",
                       2000,
-                      "Empowering Business with Data",
+                      "Driving Smarter Business Decisions",
                       2000,
                     ]}
                     speed={50}

@@ -17,6 +17,9 @@ import {
   PieChart,
   MonitorSmartphone,
   Database,
+  LineChart,
+  Briefcase,
+  Sigma,
 } from "lucide-react";
 
 interface SkillItemProps {
@@ -107,52 +110,52 @@ const SkillsSection = () => {
   }, [reduceMotion]);
 
   const skillCategories = useMemo(
-    () => [
-      {
-        icon: <FileText className="h-5 w-5" />,
-        title: "Business Analysis",
-        skills: [
-          { title: "Requirement Gathering & Documentation", percentage: 95 },
-          { title: "Stakeholder Communication", percentage: 92 },
-          { title: "BRD, FRD & User Stories", percentage: 90 },
-        ],
-      },
-      {
-        icon: <Users className="h-5 w-5" />,
-        title: "Soft Skills & Communication",
-        skills: [
-          { title: "Critical Thinking", percentage: 92, icon: <Brain className="h-4 w-4" /> },
-          { title: "Analytical Problem Solving", percentage: 90 },
-          { title: "Verbal & Written Communication", percentage: 94, icon: <MessageCircle className="h-4 w-4" /> },
-        ],
-      },
-      {
-        icon: <Laptop2 className="h-5 w-5" />,
-        title: "Tools & Technologies",
-        skills: [
-          { title: "Microsoft Excel (Advanced)", percentage: 95 },
-          { title: "Power BI (Dashboards)", percentage: 90, icon: <BarChart3 className="h-4 w-4" /> },
-          { title: "SQL (MySQL, PostgreSQL)", percentage: 88, icon: <Database className="h-4 w-4" /> },
-          { title: "JIRA / Confluence", percentage: 85, icon: <Settings className="h-4 w-4" /> },
-          { title: "Tableau", percentage: 72, icon: <PieChart className="h-4 w-4" /> },
-          { title: "UML / Use Case Diagrams", percentage: 80, icon: <Shapes className="h-4 w-4" /> },
-          { title: "Python", percentage: 75, icon: <Shapes className="h-4 w-4" /> },
-        ],
-      },
-      {
-        icon: <ClipboardList className="h-5 w-5" />,
-        title: "Data Handling & Visualization",
-        skills: [
-          { title: "Data Cleaning & Validation", percentage: 90, icon: <Filter className="h-4 w-4" /> },
-          { title: "Data Interpretation", percentage: 88, icon: <Eye className="h-4 w-4" /> },
-          { title: "Report Building", percentage: 85, icon: <FileSignature className="h-4 w-4" /> },
-          { title: "Dashboarding (Power BI/Tableau)", percentage: 82, icon: <MonitorSmartphone className="h-4 w-4" /> },
-          { title: "Data-driven Decision Support", percentage: 87 },
-        ],
-      },
-    ],
-    []
-  );
+  () => [
+    {
+      icon: <LineChart className="h-5 w-5" />,
+      title: "Data Analysis & Interpretation",
+      skills: [
+        { title: "Exploratory Data Analysis (EDA)", percentage: 92, icon: <BarChart3 className="h-4 w-4" /> },
+        { title: "Data Cleaning & Preparation", percentage: 94, icon: <Filter className="h-4 w-4" /> },
+        { title: "Data Interpretation & Insights", percentage: 90, icon: <Eye className="h-4 w-4" /> },
+        { title: "Statistical Analysis", percentage: 85, icon: <Sigma className="h-4 w-4" /> },
+      ],
+    },
+    {
+      icon: <Database className="h-5 w-5" />,
+      title: "Data Tools & Technologies",
+      skills: [
+        { title: "Excel (Advanced Formulas, Pivot Tables)", percentage: 95 },
+        { title: "SQL (MySQL, PostgreSQL)", percentage: 90 },
+        { title: "Power BI (Dashboards & Reports)", percentage: 88 },
+        { title: "Tableau (Data Visualization)", percentage: 82 },
+        { title: "Python (Pandas, NumPy, Matplotlib)", percentage: 80 },
+      ],
+    },
+    {
+      icon: <Briefcase className="h-5 w-5" />,
+      title: "Business & Domain Understanding",
+      skills: [
+        { title: "Requirement Gathering", percentage: 90 },
+        { title: "Business Problem Solving", percentage: 88 },
+        { title: "Data-driven Decision Making", percentage: 87 },
+        { title: "Reporting & Presentation", percentage: 85 },
+      ],
+    },
+    {
+      icon: <Users className="h-5 w-5" />,
+      title: "Soft Skills & Collaboration",
+      skills: [
+        { title: "Analytical Thinking", percentage: 92, icon: <Brain className="h-4 w-4" /> },
+        { title: "Communication & Storytelling", percentage: 90, icon: <MessageCircle className="h-4 w-4" /> },
+        { title: "Problem Solving", percentage: 88 },
+        { title: "Team Collaboration (Agile/JIRA)", percentage: 84 },
+      ],
+    },
+  ],
+  []
+);
+
 
   return (
     <section

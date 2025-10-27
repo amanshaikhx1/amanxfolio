@@ -108,58 +108,175 @@ export class DataProcessor {
 
   static calculateMetrics(processedData: ProcessedData): DashboardMetrics {
     const { data, mappings } = processedData;
-    
-    // Get mapped field values
-    const getMappedValues = (businessFieldName: string): any[] => {
-      const mapping = mappings.find(m => m.businessField === businessFieldName && m.mapped);
-      if (!mapping) return [];
-      return data.map(row => row[mapping.sourceColumn]).filter(v => v !== null && v !== undefined && v !== '');
-    };
 
-    // Helper function to convert to number
+    // Helpers
+    const findMapping = (fields: string[]) => mappings.find((m: any) => fields.includes(m.businessField) && m.mapped);
+
     const toNumber = (value: any): number => {
+      if (value === null || value === undefined || value === '') return 0;
       if (typeof value === 'number') return value;
       if (typeof value === 'string') {
         const cleaned = value.replace(/[$,\s%]/g, '');
         const num = parseFloat(cleaned);
         return isNaN(num) ? 0 : num;
       }
-      return 0;
+      return Number(value) || 0;
     };
 
-    // Calculate financial metrics
-    const revenueValues = getMappedValues('Revenue').concat(getMappedValues('Total Amount')).map(toNumber);
-    const profitValues = getMappedValues('Profit').map(toNumber);
-    const costValues = getMappedValues('Cost').map(toNumber);
-    const quantityValues = getMappedValues('Quantity').map(toNumber);
+    const parseDate = (value: any): Date | null => {
+      if (!value) return null;
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? null : d;
+    };
 
-    const totalRevenue = revenueValues.reduce((sum, val) => sum + val, 0);
-    const totalProfit = profitValues.reduce((sum, val) => sum + val, 0) || 
-                      (totalRevenue * 0.3); // Estimate 30% margin if no profit data
-    const totalTransactions = data.length;
-    const avgOrderValue = totalRevenue / totalTransactions || 0;
+    const groupBy = (key: string, fn: (row: Record<string, any>) => string | null) => {
+      const out: Record<string, number> = {};
+      data.forEach(row => {
+        const k = fn(row);
+        if (!k) return;
+        const val = toNumber(row[key] ?? row);
+        out[k] = (out[k] || 0) + val;
+      });
+      return out;
+    };
+
+    const dateMapping = findMapping(['Transaction Date', 'Order Date']);
+    const revenueMapping = findMapping(['Revenue', 'Total Amount', 'Amount']);
+    const profitMapping = findMapping(['Profit', 'Net Profit']);
+    const costMapping = findMapping(['Cost', 'Cost of Goods Sold', 'COGS']);
+    const transactionMapping = findMapping(['Transaction ID', 'Order ID', 'Invoice ID']);
+    const quantityMapping = findMapping(['Quantity', 'Qty']);
+    const unitPriceMapping = findMapping(['Unit Price', 'Price', 'Item Price']);
+    const inventoryMapping = findMapping(['Inventory Quantity', 'Stock', 'Quantity on Hand']);
+    const productIdMapping = findMapping(['Product ID', 'SKU']);
+    const productNameMapping = findMapping(['Product Name', 'Item Name']);
+    const customerMapping = findMapping(['Customer ID', 'Customer Email', 'Email']);
+
+    // Revenue and profit
+    const revenueValues: number[] = revenueMapping
+      ? data.map(row => toNumber(row[revenueMapping.sourceColumn])).filter(v => v > 0)
+      : [];
+
+    // Compute profit robustly: use Profit if present, else Revenue - Cost if cost present, else 0
+    let totalProfit = 0;
+    if (profitMapping) {
+      totalProfit = data.map(row => toNumber(row[profitMapping.sourceColumn])).reduce((s, v) => s + v, 0);
+    } else if (costMapping && revenueMapping) {
+      totalProfit = data.reduce((s, row) => {
+        const r = toNumber(row[revenueMapping.sourceColumn]);
+        const c = toNumber(row[costMapping.sourceColumn]);
+        return s + (r - c);
+      }, 0);
+    } else {
+      totalProfit = 0;
+    }
+
+    const totalRevenue = revenueValues.reduce((s, v) => s + v, 0);
+
+    // Transactions: prefer transaction ID grouping
+    let totalTransactions = 0;
+    if (transactionMapping) {
+      const txSet = new Set<string>();
+      data.forEach(row => {
+        const tx = String(row[transactionMapping.sourceColumn] ?? '').trim();
+        if (tx) txSet.add(tx);
+      });
+      totalTransactions = txSet.size;
+    } else {
+      totalTransactions = data.length;
+    }
+
+    const avgOrderValue = totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
     const profitMargin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
 
-    // Calculate inventory metrics
-    const inventoryValues = getMappedValues('Inventory Quantity').map(toNumber);
-    const activeProducts = new Set(getMappedValues('Product ID').concat(getMappedValues('Product Name'))).size;
+    // Inventory metrics
+    let inventoryValues: number[] = [];
+    if (inventoryMapping) {
+      inventoryValues = data.map(row => toNumber(row[inventoryMapping.sourceColumn]));
+    }
+    const activeProducts = (() => {
+      if (productIdMapping) return new Set(data.map(r => String(r[productIdMapping.sourceColumn] ?? '')).filter(Boolean)).size;
+      if (productNameMapping) return new Set(data.map(r => String(r[productNameMapping.sourceColumn] ?? '')).filter(Boolean)).size;
+      return 0;
+    })();
     const lowStock = inventoryValues.filter(q => q > 0 && q <= 10).length;
     const outOfStock = inventoryValues.filter(q => q === 0).length;
-    const totalInventoryValue = inventoryValues.reduce((sum, val) => sum + val, 0) * 100; // Estimate
+    let totalInventoryValue = 0;
+    if (inventoryMapping && unitPriceMapping) {
+      totalInventoryValue = data.reduce((s, row) => s + (toNumber(row[inventoryMapping.sourceColumn]) * toNumber(row[unitPriceMapping.sourceColumn])), 0);
+    } else {
+      totalInventoryValue = 0; // unknown without unit price
+    }
 
-    // Calculate customer metrics
-    const customerIds = new Set(getMappedValues('Customer ID').concat(getMappedValues('Customer Email'))).size;
-    const newCustomerRate = 0.15; // Estimate 15% new customers
-    const newCustomers = Math.round(customerIds * newCustomerRate);
-    const retentionRate = 73.2;
-    const avgLTV = totalRevenue / customerIds || 0;
+    // Customer metrics
+    const customers = new Map<string, Date[]>();
+    if (customerMapping) {
+      data.forEach(row => {
+        const cust = String(row[customerMapping.sourceColumn] ?? '').trim();
+        if (!cust) return;
+        const dt = dateMapping ? parseDate(row[dateMapping.sourceColumn]) : null;
+        if (!customers.has(cust)) customers.set(cust, []);
+        if (dt) customers.get(cust)!.push(dt);
+      });
+    }
+    const totalCustomers = customers.size;
+    // New customers: customers whose first purchase is within last 30 days
+    let newCustomers = 0;
+    if (dateMapping && totalCustomers > 0) {
+      const allDates = data.map(r => parseDate(r[dateMapping.sourceColumn])).filter(Boolean) as Date[];
+      const maxDate = allDates.length ? new Date(Math.max(...allDates.map(d => d.getTime()))) : null;
+      if (maxDate) {
+        const cutoff = new Date(maxDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+        customers.forEach(dates => {
+          const first = dates.sort((a,b) => a.getTime() - b.getTime())[0];
+          if (first && first.getTime() >= cutoff.getTime()) newCustomers++;
+        });
+      }
+    }
+    // Retention: percent of customers with >1 purchase
+    const repeatCustomers = Array.from(customers.values()).filter(dates => dates.length > 1).length;
+    const retentionRate = totalCustomers > 0 ? (repeatCustomers / totalCustomers) * 100 : 0;
+    const avgLTV = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
 
-    // Calculate growth rates (simulated based on data patterns)
-    const dailyGrowth = 2.3;
-    const weeklyGrowth = 5.7;
-    const monthlyGrowth = 12.5;
-    const quarterlyGrowth = 28.4;
-    const yearlyGrowth = 34.7;
+    // Growth rates: compute percent change between last and previous interval
+    const toPeriodKey = {
+      daily: (d: Date) => d.toISOString().split('T')[0],
+      weekly: (d: Date) => {
+        const tmp = new Date(d.valueOf());
+        const year = tmp.getUTCFullYear();
+        const start = new Date(Date.UTC(year,0,1));
+        const days = Math.floor((tmp.getTime() - start.getTime()) / (24*60*60*1000));
+        const week = Math.ceil((days + start.getUTCDay()+1)/7);
+        return `${year}-W${String(week).padStart(2,'0')}`;
+      },
+      monthly: (d: Date) => `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`,
+      quarterly: (d: Date) => `${d.getUTCFullYear()}-Q${Math.floor(d.getUTCMonth()/3)+1}`,
+      yearly: (d: Date) => `${d.getUTCFullYear()}`
+    } as const;
+
+    const computeGrowth = (period: keyof typeof toPeriodKey) => {
+      if (!dateMapping || !revenueMapping) return 0;
+      const grouped: Record<string, number> = {};
+      data.forEach(row => {
+        const d = parseDate(row[dateMapping.sourceColumn]);
+        if (!d) return;
+        const k = toPeriodKey[period](d as Date);
+        const rev = toNumber(row[revenueMapping.sourceColumn]);
+        grouped[k] = (grouped[k] || 0) + rev;
+      });
+      const keys = Object.keys(grouped).sort();
+      if (keys.length < 2) return 0;
+      const last = grouped[keys[keys.length-1]];
+      const prev = grouped[keys[keys.length-2]];
+      if (prev === 0) return last === 0 ? 0 : 100;
+      return ((last - prev) / Math.abs(prev)) * 100;
+    };
+
+    const dailyGrowth = computeGrowth('daily');
+    const weeklyGrowth = computeGrowth('weekly');
+    const monthlyGrowth = computeGrowth('monthly');
+    const quarterlyGrowth = computeGrowth('quarterly');
+    const yearlyGrowth = computeGrowth('yearly');
 
     return {
       totalRevenue,
@@ -174,7 +291,7 @@ export class DataProcessor {
         totalValue: totalInventoryValue
       },
       customerMetrics: {
-        total: customerIds,
+        total: totalCustomers,
         new: newCustomers,
         retention: retentionRate,
         ltv: avgLTV
@@ -222,35 +339,29 @@ export class DataProcessor {
   }
 
   private static generateRevenueTrends(data: Record<string, any>[], mappings: any[]): ChartData[] {
-    // Group by date and sum revenue
     const dateMapping = mappings.find(m => 
       (m.businessField === 'Transaction Date' || m.businessField === 'Order Date') && m.mapped
     );
     const revenueMapping = mappings.find(m => 
-      (m.businessField === 'Revenue' || m.businessField === 'Total Amount') && m.mapped
+      (m.businessField === 'Revenue' || m.businessField === 'Total Amount' || m.businessField === 'Amount') && m.mapped
     );
 
     if (!dateMapping || !revenueMapping) return [];
 
     const groupedData: Record<string, number> = {};
-    
+
     data.forEach(row => {
-      const date = new Date(row[dateMapping.sourceColumn]);
+      const d = new Date(row[dateMapping.sourceColumn]);
+      if (isNaN(d.getTime())) return;
       const revenue = parseFloat(String(row[revenueMapping.sourceColumn]).replace(/[$,\s]/g, '')) || 0;
-      
-      if (!isNaN(date.getTime()) && revenue > 0) {
-        const dateKey = date.toISOString().split('T')[0];
-        groupedData[dateKey] = (groupedData[dateKey] || 0) + revenue;
-      }
+      if (revenue <= 0) return;
+      const dateKey = d.toISOString().split('T')[0];
+      groupedData[dateKey] = (groupedData[dateKey] || 0) + revenue;
     });
 
     return Object.entries(groupedData)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, revenue]) => ({
-        date,
-        revenue,
-        name: date
-      }));
+      .map(([date, revenue]) => ({ date, revenue, name: date }));
   }
 
   private static generateCategoryPerformance(data: Record<string, any>[], mappings: any[]): ChartData[] {
@@ -266,12 +377,9 @@ export class DataProcessor {
     const groupedData: Record<string, number> = {};
     
     data.forEach(row => {
-      const category = String(row[categoryMapping.sourceColumn] || 'Other');
+      const category = String(row[categoryMapping.sourceColumn] ?? 'Other') || 'Other';
       const revenue = parseFloat(String(row[revenueMapping.sourceColumn]).replace(/[$,\s]/g, '')) || 0;
-      
-      if (revenue > 0) {
-        groupedData[category] = (groupedData[category] || 0) + revenue;
-      }
+      if (revenue > 0) groupedData[category] = (groupedData[category] || 0) + revenue;
     });
 
     return Object.entries(groupedData)

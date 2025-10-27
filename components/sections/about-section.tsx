@@ -72,11 +72,9 @@ const AboutSection = () => {
             </h3>
 
             <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              I'm building my career as a Business Data Analyst by combining data, 
-              communication, and structured thinking to solve real-world business challenges. 
-              I work with tools like Excel, SQL, Power BI, and Python, and built this portfolio 
-              using AI tools to turn ideas into a live project. My goal is to drive better outcomes 
-              by connecting data, people, and processes in clear and meaningful ways.
+              I am a motivated BCA student at Amity University (3rd semester), passionate about transforming raw data into actionable insights. My short-term focus is building a strong foundation in Data Analytics, gaining hands-on experience with SQL, Excel, Python, and data visualization tools, and contributing to real-world projects that drive business decisions.
+
+Alongside my academic journey, I am continuously developing my knowledge in Data Scientist and Machine Learning, preparing for a future transition from a Data Analyst role to a Data Scientist. I am deeply interested in solving complex problems using data, uncovering patterns, and enabling data-driven strategies.
             </p>
 
             {/* Contact Info */}
