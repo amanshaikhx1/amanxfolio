@@ -3,7 +3,6 @@
 import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import styled from "styled-components";
 
 const educationData = [
   {
@@ -18,7 +17,7 @@ const educationData = [
     degree: "Master of Science ( Computer Science)",
     university: "Heriot-Watt University",
     description:
-      "Planning to pursue a Master’s in Computer Science with a focus on advanced software engineering, backend systems, distributed architecture, and cloud computing. Aiming to deepen expertise in scalable system design and real-world engineering practices.",
+      "Planning to pursue a Master's in Computer Science with a focus on advanced software engineering, backend systems, distributed architecture, and cloud computing. Aiming to deepen expertise in scalable system design and real-world engineering practices.",
   },
   {
     year: "2026 (Jan) - 2026 (Dec)",
@@ -53,55 +52,24 @@ const experienceData = [
   },
 ];
 
-
 // ─── Pattern for Light Mode ───
 const Pattern = () => {
   return (
-    <StyledWrapper>
-      <div className="container" />
-    </StyledWrapper>
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="w-full h-full bg-gradient-to-b from-white via-white to-transparent, bg-gradient-to-r from-cyan-400 to-purple-700 relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "linear-gradient(90deg, #ccc 1px, transparent 1px)",
+            backgroundSize: "50px 100%",
+            maskImage: "linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%)",
+            WebkitMaskImage: "linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%)",
+          }}
+        />
+      </div>
+    </div>
   );
 };
-
-const StyledWrapper = styled.div`
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-
-  .container {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        #fff 0%,
-        #fff 40%,
-        rgba(255, 255, 255, 0) 100%
-      ),
-      linear-gradient(to right, #0ed2da, #5f29c7);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .container::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(90deg, #ccc 1px, transparent 1px);
-    background-size: 50px 100%;
-    pointer-events: none;
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0) 70%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0) 70%
-    );
-  }
-`;
 
 // ─── Resume Item ───
 const ResumeItem = memo(
@@ -123,24 +91,13 @@ const ResumeItem = memo(
   }) => {
     return (
       <motion.div
-        className="
-          relative pl-10 pr-6 py-8 
-          border-b border-gray-200 dark:border-gray-700/50 
-          last:border-none group
-        "
+        className="relative pl-10 pr-6 py-8 border-b border-gray-200 dark:border-gray-700/50 last:border-none group"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
       >
-        <div
-          className="
-            absolute left-[-12px] top-8 w-6 h-6 rounded-full 
-            bg-green-500 border-2 
-            border-white dark:border-gray-900 
-            z-20 shadow-sm
-          "
-        />
+        <div className="absolute left-[-12px] top-8 w-6 h-6 rounded-full bg-green-500 border-2 border-white dark:border-gray-900 z-20 shadow-sm" />
 
         <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">
           {type === "education" ? data.degree : data.position}
@@ -172,14 +129,7 @@ const ResumeSection = memo(() => {
   return (
     <section
       id="resume"
-      className={`
-        py-20
-        relative
-        overflow-hidden
-        bg-gray-50 dark:bg-[rgb(3,7,18)]
-        text-gray-900 dark:text-gray-100
-        transition-colors duration-300
-      `}
+      className="py-20 relative overflow-hidden bg-gray-50 dark:bg-[rgb(3,7,18)] text-gray-900 dark:text-gray-100 transition-colors duration-300"
     >
       {/* Light mode only: show pattern background */}
       {mounted && !isDark && <Pattern />}
@@ -209,13 +159,7 @@ const ResumeSection = memo(() => {
 
       <div className="container mx-auto px-5 relative z-10">
         <div className="text-center mb-16">
-          <span
-            className="
-              inline-block px-4 py-1 text-sm font-medium rounded-full 
-              bg-green-600/10 text-green-700 
-              dark:bg-green-500/15 dark:text-green-400
-            "
-          >
+          <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-green-600/10 text-green-700 dark:bg-green-500/15 dark:text-green-400">
             My Resume
           </span>
           <h2
@@ -232,18 +176,7 @@ const ResumeSection = memo(() => {
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8">
               Education :-
             </h3>
-            <div
-              className="
-                relative 
-                bg-white/90 dark:bg-[rgb(17,24,39)] 
-                backdrop-blur-[2px] dark:backdrop-blur-none
-                rounded-2xl 
-                border-l-4 md:border-l-[6px] border-green-500 
-                shadow-xl dark:shadow-none 
-                overflow-hidden
-                transition-all duration-300
-              "
-            >
+            <div className="relative bg-white/90 dark:bg-[rgb(17,24,39)] backdrop-blur-[2px] dark:backdrop-blur-none rounded-2xl border-l-4 md:border-l-[6px] border-green-500 shadow-xl dark:shadow-none overflow-hidden transition-all duration-300">
               {educationData.map((item, index) => (
                 <ResumeItem key={index} data={item} index={index} type="education" />
               ))}
@@ -254,18 +187,7 @@ const ResumeSection = memo(() => {
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8">
               Experience :-
             </h3>
-            <div
-              className="
-                relative 
-                bg-white/90 dark:bg-[rgb(17,24,39)] 
-                backdrop-blur-[2px] dark:backdrop-blur-none
-                rounded-2xl 
-                border-l-4 md:border-l-[6px] border-green-500 
-                shadow-xl dark:shadow-none 
-                overflow-hidden
-                transition-all duration-300
-              "
-            >
+            <div className="relative bg-white/90 dark:bg-[rgb(17,24,39)] backdrop-blur-[2px] dark:backdrop-blur-none rounded-2xl border-l-4 md:border-l-[6px] border-green-500 shadow-xl dark:shadow-none overflow-hidden transition-all duration-300">
               {experienceData.map((item, index) => (
                 <ResumeItem key={index} data={item} index={index} type="experience" />
               ))}

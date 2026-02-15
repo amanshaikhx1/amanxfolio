@@ -273,28 +273,6 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0 ml-2">
-            <div id="dataTools" className="relative group hidden lg:block">
-              <button 
-                tabIndex={0}
-                className="font-medium"
-                style={{ fontFamily: "'Goldman', sans-serif" }}
-              >
-                Data Tools
-                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div className="absolute right-0 top-full mt-2 w-56 bg-gray-900 border border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 z-[100] pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
-                <Link
-                  href={"/data-tools" as Route<"/data-tools">}
-                  className="block px-4 py-3 text-white hover:bg-gray-800 rounded-t-lg transition-colors duration-150"
-                  style={{ fontFamily: "'Goldman', sans-serif" }}
-                >
-                  Auto Dashboard
-                </Link>
-              </div>
-            </div>
-
             <Button
               variant="ghost"
               size="icon"
@@ -369,27 +347,7 @@ const Header = () => {
                 </Link>
               ))}
 
-              <div className="relative group mt-0 border-b border-gray-600">
-                <button
-                  type="button"
-                  className="flex items-center w-full py-4 text-left text-white font-medium focus:outline-none justify-between"
-                  tabIndex={0}
-                  style={{ fontFamily: "'Goldman', sans-serif" }}
-                >
-                  <span className="text-base font-medium tracking-tight uppercase">Data Tools</span>
-                  <svg className="ml-2 w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <Link
-                  href={"/data-tools" as Route<"/data-tools">}
-                  className="block px-0 py-3 text-white hover:text-green-500 transition-colors text-sm"
-                  onClick={closeMobileMenu}
-                  style={{ fontFamily: "'Goldman', sans-serif" }}
-                >
-                  Auto Dashboard Generator
-                </Link>
-              </div>
+              {/* Data Tools removed */}
             </nav>
           </aside>
         </div>

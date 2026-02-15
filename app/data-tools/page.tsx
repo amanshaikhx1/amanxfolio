@@ -1,6 +1,7 @@
-import { redirect } from 'next/navigation';
-
 export default function DataToolsPage() {
-  redirect('/auto-dashboard');
-  return null;
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-gray-400">Coming soon...</p>
+    </div>
+  );
 }
