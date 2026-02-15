@@ -37,7 +37,7 @@ export default function HomeBackground() {
   }, [])
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a]">
+    <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a]">
       {/* Static Stars */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
         {stars.map((star) => (
