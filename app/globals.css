@@ -2,6 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tapestry – local font (AmanxFolio in header) */
+@font-face {
+  font-family: "Tapestry";
+  src: url("/fonts/tapestry-v6-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Goldman – local font (header nav, Data Tools, etc.) */
+@font-face {
+  font-family: "Goldman";
+  src: url("/fonts/goldman-v21-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Black Ops One – headings */
+@font-face {
+  font-family: "Black Ops One";
+  src: url("/fonts/black-ops-one-v21-latin-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* VT323 – monospace display font for hero subtitle */
+@font-face {
+  font-family: "VT323";
+  src: url("/fonts/vt323-v18-latin-regular.woff2") format("woff2"),
+       url("/fonts/vt323-v18-latin-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Helper class to apply VT323 to specific elements */
+.font-vt323 {
+  font-family: "VT323", monospace;
+}
+
+/* Saira Stencil One – display font for hero name */
+@font-face {
+  font-family: "Saira Stencil One";
+  src: url("/fonts/saira-stencil-one-v18-latin-regular.woff2") format("woff2"),
+       url("/fonts/saira-stencil-one-v18-latin-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Helper class to apply Saira Stencil One to specific elements */
+.font-saira-stencil {
+  font-family: "Saira Stencil One", "Black Ops One", sans-serif;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

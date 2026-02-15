@@ -1,17 +1,46 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { User, Mail, MapPin, Download, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 const AboutSection = () => {
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const current = resolvedTheme ?? theme;
+  const isLight = mounted && current === "light";
+  const isDark = mounted && current === "dark";
+
   return (
     <section
       id="about"
-      className="py-20 md:py-32 bg-gray-50 dark:bg-gray-950 relative overflow-hidden"
+      className={`py-12 md:py-20 relative overflow-hidden ${isLight ? "bg-[#fefcff]" : "bg-gray-50 dark:bg-gray-950"}`}
     >
+      {isLight && (
+        <div
+          className="absolute inset-0 z-0"
+          aria-hidden
+          style={{
+            backgroundImage: `radial-gradient(circle at 30% 70%, rgba(173, 216, 230, 0.35), transparent 60%), radial-gradient(circle at 70% 30%, rgba(255, 182, 193, 0.4), transparent 60%)`,
+          }}
+        />
+      )}
+
+      {isDark && (
+        <div
+          className="absolute inset-0 z-0"
+          aria-hidden
+          style={{
+            background: `radial-gradient(ellipse 110% 70% at 25% 80%, rgba(147, 51, 234, 0.12), transparent 55%), radial-gradient(ellipse 130% 60% at 75% 15%, rgba(59, 130, 246, 0.10), transparent 65%), radial-gradient(ellipse 80% 90% at 20% 30%, rgba(236, 72, 153, 0.14), transparent 50%), radial-gradient(ellipse 100% 40% at 60% 70%, rgba(16, 185, 129, 0.08), transparent 45%), #000000`,
+          }}
+        />
+      )}
       {/* Decorative Blobs (optimized with will-change & aria-hidden) */}
       <div
         className="absolute top-[-250px] left-[-250px] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-green-500/10 to-transparent will-change-transform"
@@ -31,7 +60,7 @@ const AboutSection = () => {
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-24 after:h-1 after:bg-green-500 after:mx-auto">
+          <h2 style={{ fontFamily: "'Black Ops One', sans-serif" }} className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-24 after:h-1 after:bg-green-500 after:mx-auto">
             About Me
           </h2>
         </div>
@@ -72,9 +101,7 @@ const AboutSection = () => {
             </h3>
 
             <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-              I am a motivated BCA student at Amity University (3rd semester), passionate about transforming raw data into actionable insights. My short-term focus is building a strong foundation in Data Analytics, gaining hands-on experience with SQL, Excel, Python, and data visualization tools, and contributing to real-world projects that drive business decisions.
-
-Alongside my academic journey, I am continuously developing my knowledge in Data Scientist and Machine Learning, preparing for a future transition from a Data Analyst role to a Data Scientist. I am deeply interested in solving complex problems using data, uncovering patterns, and enabling data-driven strategies.
+              I am a passionate Java Backend student focused on building scalable server-side applications and clean backend architectures. I work with Spring Boot, REST APIs, and databases to create practical backend projects and continuously improve my engineering skills. Along with backend development, I actively practice DSA and problem solving to strengthen my logical thinking and coding ability. I also explore cloud fundamentals and modern backend tools to understand how real production systems are built. My goal is to grow into a strong backend engineer who can design reliable and high-performance systems.
             </p>
 
             {/* Contact Info */}

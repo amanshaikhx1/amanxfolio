@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/app/lib/supabase"; // ensure correct path
 
 import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 
 type Blog = {
   id: string;
@@ -18,6 +19,13 @@ type Blog = {
 
 export default function BlogSection() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  const { theme, resolvedTheme } = useTheme();
+  const [mountedTheme, setMountedTheme] = useState(false);
+
+  useEffect(() => setMountedTheme(true), []);
+  const currentTheme = resolvedTheme ?? theme;
+  const isLight = mountedTheme && currentTheme === "light";
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -38,8 +46,22 @@ export default function BlogSection() {
   }, []);
 
   return (
-    <section id="blog" className="py-20 md:py-32 bg-gray-50 dark:bg-gray-950">
-      <div className="container mx-auto px-5">
+    <section id="blog" className={`py-12 md:py-20 relative overflow-hidden ${isLight ? "bg-white" : "bg-gray-50 dark:bg-gray-950"}`}>
+      {isLight && (
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          aria-hidden
+          style={{
+            background: "#ffffff",
+            backgroundImage: `radial-gradient(circle at top right, rgba(70, 130, 180, 0.5), transparent 70%)`,
+            filter: "blur(80px)",
+            backgroundRepeat: "no-repeat",
+            opacity: 0.9,
+          }}
+        />
+      )}
+
+      <div className="container mx-auto px-5 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="mb-4">
@@ -47,7 +69,7 @@ export default function BlogSection() {
               My Blog
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-20 after:h-1 after:bg-green-500 after:mx-auto">
+          <h2 style={{ fontFamily: "'Black Ops One', sans-serif" }} className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-20 after:h-1 after:bg-green-500 after:mx-auto">
             Latest Articles
           </h2>
         </div>

@@ -1,8 +1,9 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import SectionTitle from "@/components/section-title";
+import { useTheme } from "next-themes";
+import styled from "styled-components";
 
 const educationData = [
   {
@@ -10,85 +11,146 @@ const educationData = [
     degree: "Bachelor of Computer Applications",
     university: "Amity University",
     description:
-      "Pursuing BCA with a focus on data analysis, business systems, and analytical problem-solving. Skilled in Excel and SQL, and developing expertise in transforming data into actionable insights through projects.",
+      "Pursuing BCA with a strong focus on Java backend engineering, DSA, DBMS, and core computer science fundamentals. Building hands-on backend projects using Spring Boot and REST APIs while exploring cloud and deployment fundamentals.",
   },
   {
-    year: "2027 - 2029",
-    degree: "Master of Science ( Data Science )",
-    university: "Amity University",
+    year: "2027 - 2029 (Planned)",
+    degree: "Master of Science ( Computer Science)",
+    university: "Heriot-Watt University",
     description:
-      "Planning to pursue a Master's in Data Science to deepen expertise in machine learning, advanced analytics, and data-driven problem-solving. Aiming to strengthen technical and research skills for real-world data applications.",
+      "Planning to pursue a Master’s in Computer Science with a focus on advanced software engineering, backend systems, distributed architecture, and cloud computing. Aiming to deepen expertise in scalable system design and real-world engineering practices.",
   },
   {
-    year: "2028",
-    degree: "IIBA® Certification in Business Data Analytics (CBDA)",
-    university: "International Institute of Business Analysis (IIBA)",
+    year: "2026 (Jan) - 2026 (Dec)",
+    degree: "Professional Certificate in Software Engineering",
+    university: "IIT Roorkee iHub DivyaSampark",
     description:
-      "Planning to earn the CBDA certification to validate expertise in business data analytics, including data interpretation, insight generation, and data-driven decision-making for business impact.",
+      "Currently pursuing a Software Engineering certification with guidance from industry-experienced mentors and hands-on project development.",
   },
 ];
 
 const experienceData = [
   {
     year: "2025",
-    position: "Aspiring Data Analyst – Learning in Progress",
+    position: "Java Backend Developer – Learning in Progress",
     company: "Independent / Self-Paced",
     description:
-      "Building a strong foundation in data analysis through self-learning and academic projects. Gaining hands-on experience with Excel, SQL, Power BI, and Python while exploring techniques for data cleaning, visualization, and insight generation.",
+      "Learning Java backend development through hands-on projects, DSA practice, and building REST APIs with Spring Boot and SQL.",
   },
   {
-    year: "2026 (Planned)",
-    position: "CBDA Certification Preparation – IIBA®",
-    company: "Remote / Independent",
+    year: "2026",
+    position: "Software Engineering Certification – In Progress",
+    company: "Industry-Guided Program",
     description:
-      "Preparing for the IIBA® CBDA certification with focus on business data analytics, data interpretation, and insight generation. Practicing real-world case studies to apply data-driven decision-making using Excel, Power BI, and SQL.",
+      "Completing a software engineering certification with industry-mentor guidance and practical project-based training.",
   },
   {
-    year: "2027 (Planned)",
-    position: "Entry-Level Data Analyst Role",
-    company: "Open to Opportunities Across Industries",
+    year: "2027 (Target)",
+    position: "Entry-Level Software Engineer / Java Backend Role",
+    company: "Open to Backend & SWE Opportunities",
     description:
-      "Aiming to apply academic and project experience in real-world analytics. Focused on data cleaning, visualization, and insight generation to support data-driven business decisions in cross-functional environments.",
+      "Targeting entry-level software engineering roles to apply backend skills and problem-solving in real-world systems.",
   },
 ];
 
+
+// ─── Pattern for Light Mode ───
+const Pattern = () => {
+  return (
+    <StyledWrapper>
+      <div className="container" />
+    </StyledWrapper>
+  );
+};
+
+const StyledWrapper = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  .container {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        #fff 0%,
+        #fff 40%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      linear-gradient(to right, #0ed2da, #5f29c7);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(90deg, #ccc 1px, transparent 1px);
+    background-size: 50px 100%;
+    pointer-events: none;
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+  }
+`;
+
+// ─── Resume Item ───
 const ResumeItem = memo(
   ({
     data,
     index,
     type,
   }: {
-    data: any;
+    data: {
+      year: string;
+      degree?: string;
+      position?: string;
+      university?: string;
+      company?: string;
+      description: string;
+    };
     index: number;
     type: "education" | "experience";
   }) => {
     return (
       <motion.div
-        className="relative pl-8 mb-10 last:mb-0 group"
-        initial={{ opacity: 0, x: type === "education" ? -25 : 25 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.5, delay: Math.min(index * 0.1, 0.3) }}
+        className="
+          relative pl-10 pr-6 py-8 
+          border-b border-gray-200 dark:border-gray-700/50 
+          last:border-none group
+        "
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
       >
         <div
-          className="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-green-500 to-transparent"
-          aria-hidden="true"
-        ></div>
-        <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 rounded-full bg-gradient-to-r from-green-500 to-green-400 shadow-lg shadow-green-500/30 group-hover:scale-150 transition-transform duration-300"></div>
+          className="
+            absolute left-[-12px] top-8 w-6 h-6 rounded-full 
+            bg-green-500 border-2 
+            border-white dark:border-gray-900 
+            z-20 shadow-sm
+          "
+        />
 
-        <span className="inline-block px-4 py-1 mb-3 text-sm font-medium rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
-          {data.year}
-        </span>
-
-        <h4 className="text-xl font-semibold mb-1 text-gray-800 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-500 transition-colors duration-300">
+        <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 leading-tight">
           {type === "education" ? data.degree : data.position}
         </h4>
 
-        <h5 className="text-base italic mb-3 text-gray-600 dark:text-gray-400">
-          {type === "education" ? data.university : data.company}
+        <h5 className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest mb-4">
+          {type === "education" ? data.university : data.company} — {data.year}
         </h5>
 
-        <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
+        <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
           {data.description}
         </p>
       </motion.div>
@@ -96,62 +158,118 @@ const ResumeItem = memo(
   }
 );
 
+// ─── Main Section ───
 const ResumeSection = memo(() => {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === "dark";
+
   return (
     <section
       id="resume"
-      className="py-20 md:py-32 bg-white dark:bg-[#030712] relative overflow-hidden transition-colors duration-500"
-      aria-labelledby="resume-title"
+      className={`
+        py-20
+        relative
+        overflow-hidden
+        bg-gray-50 dark:bg-[rgb(3,7,18)]
+        text-gray-900 dark:text-gray-100
+        transition-colors duration-300
+      `}
     >
+      {/* Light mode only: show pattern background */}
+      {mounted && !isDark && <Pattern />}
+
+      {/* Light mode readability improvement */}
+      {mounted && !isDark && (
+        <div className="absolute inset-0 bg-white/65 dark:bg-transparent z-0 pointer-events-none" />
+      )}
+
+      {/* Dark mode only: cosmic nebula background */}
+      {mounted && isDark && (
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          aria-hidden
+          style={{
+            background: `
+              radial-gradient(ellipse 110% 70% at 25% 80%, rgba(147, 51, 234, 0.12), transparent 55%),
+              radial-gradient(ellipse 130% 60% at 75% 15%, rgba(59, 130, 246, 0.10), transparent 65%),
+              radial-gradient(ellipse 80% 90% at 20% 30%, rgba(236, 72, 153, 0.14), transparent 50%),
+              radial-gradient(ellipse 100% 40% at 60% 70%, rgba(16, 185, 129, 0.08), transparent 45%),
+              #000000
+            `,
+            opacity: 0.9,
+          }}
+        />
+      )}
+
       <div className="container mx-auto px-5 relative z-10">
         <div className="text-center mb-16">
-          <div className="mb-4">
-            <span className="inline-block px-4 py-1 text-sm font-medium rounded-full bg-green-500/10 text-green-600 dark:text-green-500">
-              My Resume
-            </span>
-          </div>
-
+          <span
+            className="
+              inline-block px-4 py-1 text-sm font-medium rounded-full 
+              bg-green-600/10 text-green-700 
+              dark:bg-green-500/15 dark:text-green-400
+            "
+          >
+            My Resume
+          </span>
           <h2
-            id="resume-title"
-            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block after:content-[''] after:block after:mt-2 after:w-24 after:h-1 after:bg-green-500 after:mx-auto"
+            style={{ fontFamily: "'Black Ops One', sans-serif" }}
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-2"
           >
             Education & Experience
           </h2>
+          <div className="w-16 h-1 bg-green-500 mx-auto mt-2"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-          {/* Education */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-bold mb-8 pl-5 relative text-gray-800 dark:text-white bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-              <span className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-green-500 to-green-400 rounded"></span>
-              Education
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8">
+              Education :-
             </h3>
-
-            {educationData.map((item, index) => (
-              <ResumeItem
-                key={`edu-${index}`}
-                data={item}
-                index={index}
-                type="education"
-              />
-            ))}
+            <div
+              className="
+                relative 
+                bg-white/90 dark:bg-[rgb(17,24,39)] 
+                backdrop-blur-[2px] dark:backdrop-blur-none
+                rounded-2xl 
+                border-l-4 md:border-l-[6px] border-green-500 
+                shadow-xl dark:shadow-none 
+                overflow-hidden
+                transition-all duration-300
+              "
+            >
+              {educationData.map((item, index) => (
+                <ResumeItem key={index} data={item} index={index} type="education" />
+              ))}
+            </div>
           </div>
 
-          {/* Experience */}
           <div>
-            <h3 className="text-2xl font-bold mb-8 pl-5 relative text-gray-800 dark:text-white bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-              <span className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-green-500 to-green-400 rounded"></span>
-              Experience
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8">
+              Experience :-
             </h3>
-
-            {experienceData.map((item, index) => (
-              <ResumeItem
-                key={`exp-${index}`}
-                data={item}
-                index={index}
-                type="experience"
-              />
-            ))}
+            <div
+              className="
+                relative 
+                bg-white/90 dark:bg-[rgb(17,24,39)] 
+                backdrop-blur-[2px] dark:backdrop-blur-none
+                rounded-2xl 
+                border-l-4 md:border-l-[6px] border-green-500 
+                shadow-xl dark:shadow-none 
+                overflow-hidden
+                transition-all duration-300
+              "
+            >
+              {experienceData.map((item, index) => (
+                <ResumeItem key={index} data={item} index={index} type="experience" />
+              ))}
+            </div>
           </div>
         </div>
       </div>

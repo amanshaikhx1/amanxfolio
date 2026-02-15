@@ -17,10 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />        
       </head>
       <body className="min-h-screen antialiased bg-background text-foreground">
-        {/* ✅ Sirf ThemeProvider control karega */}
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="dark"

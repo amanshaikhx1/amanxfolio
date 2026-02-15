@@ -81,7 +81,7 @@ const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="py-20 md:py-32 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 overflow-hidden"
+      className="py-12 md:py-20 bg-[rgb(197,203,211,0.5)] dark:bg-gray-900 overflow-hidden"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
@@ -91,7 +91,7 @@ const ProjectsSection = () => {
               My Recent
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 
+          <h2 style={{ fontFamily: "'Black Ops One', sans-serif" }} className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 
           dark:from-white dark:to-gray-300 bg-clip-text text-transparent relative inline-block 
           after:content-[''] after:block after:mt-2 after:w-20 after:h-1 after:bg-green-500 after:mx-auto">
             Projects
@@ -253,5 +253,5 @@ const ProjectsSection = () => {
     </section>
   )
 }
-
 export default ProjectsSection
+

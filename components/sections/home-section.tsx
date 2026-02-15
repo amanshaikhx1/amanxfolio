@@ -39,10 +39,10 @@ const HomeSection = () => {
   return (
     <section
       id="home"
-      className="relative flex items-center min-h-screen w-full overflow-hidden"
+      className="relative flex items-center min-h-screen w-full overflow-hidden bg-[#0a0a0a]"
     >
-      {/* ✅ Lightweight Background */}
-      <div className="absolute inset-0 -z-10">
+      {/* Home section background – stars, lines, glow */}
+      <div className="absolute top-0 left-0 right-0 bottom-0 z-0 min-h-full w-full">
         <HomeBackground />
       </div>
 
@@ -55,74 +55,63 @@ const HomeSection = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-5 relative z-10">
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-10">
-          {/* Text Section */}
+      <div className="container mx-auto px-5 relative z-150">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8">
+
+          {/* Main Content (center) - moved to center vertically */}
           <motion.div
-            className="w-full md:w-1/2 text-center md:text-left"
+            className="w-full md:w-2/3 text-center md:text-left px-4 md:px-8 flex items-center"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="md:pl-20">
-              <h3 className="text-xl md:text-2xl text-gray-400 mb-2 md:mb-3 inline-block relative pl-0 md:pl-10">
-                <span className="hidden md:inline-block absolute left-0 top-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-400 -translate-y-1/2"></span>
-                Hey, My name is
-              </h3>
+            <div className="md:pl-6 lg:pl-12 mt-32 md:mt-0">
+              <div className="inline-block mb-4">
+                <span className="px-4 py-2 bg-black/40 text-green-500 font-semibold rounded">MY DIGITAL SPACE</span>
+              </div>
 
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-6 relative text-white dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-gray-300 dark:bg-clip-text">
+              <h1 className="text-5xl md:text-7xl font-extrabold mb-2 text-white font-saira-stencil">
                 Aman Shaikh
-                <span className="absolute left-1/2 transform -translate-x-1/2 bottom-[-10px] w-32 h-1 bg-gradient-to-r from-green-500 to-green-400 rounded"></span>
               </h1>
 
-              <p className="text-xl md:text-2xl mb-6 md:mb-8 flex items-center justify-center md:justify-start">
-                <span className="text-white dark:text-inherit">A</span>{" "}
-                <span className="text-green-500 font-semibold ml-2 relative">
-                  <TypeAnimation
-                    sequence={[
-                      "Data Analyst.",
-                      2000,
-                      "Path: Data Analyst → Data Scientist",
-                      2000,
-                      "Driving Smarter Business Decisions",
-                      2000,
-                    ]}
-                    speed={50}
-                    repeat={Infinity}
-                  />
-                </span>
+              <h2 className="text-3xl md:text-5xl text-white/90 mb-6 font-vt323">SOFTWARE ENGINEER</h2>
+
+              <p className="max-w-2xl mx-auto md:mx-0 text-gray-300 mb-6">
+                A Passionate Java Backend Student Focused On Scalable Systems And High-Performance Backend Development, Practicing DSA And Exploring Cloud Technologies.
               </p>
 
-              <Button
-                asChild
-                size="lg"
-                className="bg-gradient-to-r from-green-500 to-green-400 hover:from-green-600 hover:to-green-500 text-white rounded-full px-6 py-3 shadow-lg shadow-green-500/30 hover:shadow-green-500/50 hover:-translate-y-1 transition-all group"
-              >
-                <a
-                  href="#contact"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const contactSection =
-                      document.getElementById("contact");
-                    if (contactSection) {
-                      window.scrollTo({
-                        top: contactSection.offsetTop - 80,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-r from-green-500 to-green-400 hover:from-green-600 hover:to-green-500 text-white rounded-full px-6 py-3 shadow-lg shadow-green-500/30 hover:shadow-green-500/50 hover:-translate-y-1 transition-all group"
                 >
-                  Hire Me
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const contactSection = document.getElementById("contact");
+                      if (contactSection) {
+                        window.scrollTo({
+                          top: contactSection.offsetTop - 80,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                  >
+                    Hire Me
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </Button>
+
+              </div>
             </div>
           </motion.div>
 
-          {/* Image Section */}
+          {/* Image Column (right) */}
           <motion.div
-            className="w-full md:w-1/2 max-w-md mx-auto"
+            className="w-full md:w-1/3 max-w-none md:max-w-md mx-auto h-64 md:h-auto -mt-8 md:mt-0"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
